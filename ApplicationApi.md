@@ -8,24 +8,11 @@ The Application API is where an Application can be submitted through ```POST``` 
 ### Headers
 Headers annotated with \* are mandatory
 
-* ```Subscription-Key: <key>```\*  for more details see [security page](Security.md) and [tutorials page](Tutorials.md)
-* ```Idempotency-Key: <key>```\*  see [idempotency page](Idempotency.md).
+* `Idempotency-Key: <key>`\*  see [idempotency page](Idempotency.md).
+* `Content-Type: application/json`.
   
 ## Retrieve Application
 ```GET /applications/{applicationId}```
-### Headers
-Headers anotated with \* are mandatory
-
-```Subscription-key: <key>```\* , for more details see [security page](Security.md) and [tutorials page](Tutorials.md)
-
-
-## Endpoint
-### Development Endpoint
-To be added
-
-### Production Endpoint
-To be added
-
 
 ## Application Schema
 
@@ -141,7 +128,7 @@ To be added
 
 | Field                 | Type     | Description                                                                                                                                                        | Example                                         |
 |-----------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| name                  | string   | Company's name                                                                                                                                                     | A very nice company name                        |
+| name                  | string   | Company's name                                                                                                                                                     | Company name                                    |
 | fax                   | string   | Company's fax number                                                                                                                                               | +49 (0) XXXX XXXX-39                            |
 | iban                  | string   | Company's IBAN                                                                                                                                                     | DEXXXXXXXXXXXXXXXXXXXX                          |
 | bic                   | string   | Company's BIC                                                                                                                                                      | INGDDEFFXXX                                     |
@@ -237,4 +224,4 @@ Credit score information
 | last_updated_by   | string    | Last actor that modified the application                                    | `PARTNER`                                                          |
 | status            | enum      | The status of the application<br>see [status](Enums.md#tb-status)           | `REJECTED`                                                         |
 
-Note that the difference between a rejected application response and a non rejected one is the `status` (`REJECTED`) and the addition of the `rejection_reasons` data point to the response DTO.
+Note: The difference between a rejected application response and a non-rejected one is the `status` (`REJECTED`) and the addition of the `rejection_reasons` data point to the response DTO.

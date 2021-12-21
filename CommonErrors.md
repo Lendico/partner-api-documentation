@@ -1,7 +1,7 @@
 
 # Partner API
-# Commons Erros and Rejection Reasons
-## Commons Erros 
+# Commons Errors and Rejection Reasons
+## Commons Errors 
 Partner API uses the standard [Problem Details for HTTP APIs(RFC-7807)](https://datatracker.ietf.org/doc/html/rfc7807) for returning erros.
 ### Response Body Syntax Example
 ```
@@ -26,16 +26,19 @@ or
 }
 ```
 
-| Error Type                                         | HTTP Status Code | Title                    | Detail                                                                             | Description  |
-|----------------------------------------------------|------------------|--------------------------|------------------------------------------------------------------------------------|--------------|
-| [https://www.lendico.de/](https://www.lendico.de/) | 400              | Constraint Violation     | violations:\["", ""\]                                                              | Client error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Missing subscription key | see [Security Page](Security.md)                                                   | Client error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Invalid subscription key | see [Security Page](Security.md)                                                   | Client error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Partner not matched      | Unable to find a partner with the provided key/id, please contact the system admin | Client error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 404              | Not Found                |                                                                                    | Client error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 409              | Resource Duplicated      |                                                                                    | Client error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 500              | Internal Server Error    | The internal exception                                                             | Server error |
-| [https://www.lendico.de/](https://www.lendico.de/) | 503              | Service Unavailable      |                                                                                    | Server error |
+| Error Type                                         | HTTP Status Code | Title                                  | Detail                                                                              | Description  |
+|----------------------------------------------------|------------------|----------------------------------------|-------------------------------------------------------------------------------------|--------------|
+| [https://www.lendico.de/](https://www.lendico.de/) | 400              | Constraint Violation                   | violations:\["", ""\]                                                               | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Missing subscription key               | see [Security Page](Security.md)                                                    | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Invalid subscription key               | see [Security Page](Security.md)                                                    | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Partner not matched                    | Unable to find a partner with the provided key/id, please contact the system admin  | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 401              | Invalid client certificate             | Invalid certificate provided, please try again with a valid certificate             | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 403              | Forbidden                              | see [Security Page](Security.md)                                                    | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 404              | Not Found                              |                                                                                     | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 429              | Limit of request by crefo Id exceeded. | Limit of request, in a given amount of time, by crefo Id exceeded, try again later. | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 429              | Rate limit is exceeded.                | see [Security Page](Security.md)                                                    | Client error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 500              | Internal Server Error                  | The internal exception                                                              | Server error |
+| [https://www.lendico.de/](https://www.lendico.de/) | 503              | Service Unavailable                    |                                                                                     | Server error |
 
 ## Rejection Reasons
 
