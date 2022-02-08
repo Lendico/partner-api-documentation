@@ -5,16 +5,17 @@
 # 1.1 Business Onboarding
 If you are here most likely you have already been through the business onboarding process.
 But in case you have not, you need to request onboarding as a Lendico partner through [Partner Werden Page](https://www.lendico.de/partner-werden).
-The Business Development Team will be in touch for signing contracts, terms and conditions, privacy agreements etc.
+The Partner Management Team will be in touch for signing contracts, terms and conditions, privacy agreements etc.
 In case you are eligible for using the API, we will start the API Onboarding.
 
 # 1.2 API Onboarding
 
 After the business Onboarding, comes the technical Onboarding, which is composed of the below steps:
 * First you should create an account in the [API Portal](https://api-portal.sandbox.lendico.de), see how to sign up [here](ApiPortal.md).
-* Then we will request the IP address from where the Partner API will get the calls, 
-for whitelisting it on our API.
-And to perform mTLS communication, we will aslso request the client certificate in the format `pfx`, e.g `client-certificate.pfx`(for more information how to create a `pfx` file from your certificate go to the [tutorials page](Tutorials.md).).
+* Then we will request the list IPs address from where the Partner API will get the calls, 
+for whitelisting them on our API.
+And to perform mTLS communication, we will also request the client certificate in the format `pfx`, e.g `certificate.pfx`(for more information how to create a `pfx` file from your certificate go to the [tutorials page](Tutorials.md).)
+  see also the certificate specification in [the mTLS section of the security page](Security.md).
 * After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md). 
 
 

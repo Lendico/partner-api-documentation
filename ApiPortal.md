@@ -21,23 +21,23 @@ as well to the partner API documentation.
 If you are using the portal for the first time you need to Sign Up to be able to use all the features.
 For signing up use an account that will be related to the system you want to integrate with partner API, avoid using personal account.
 
-1. Click in the menu Sign In.
-2. Click in the button `Azure Active Directory B2C`.
+1. Click on the menu Sign In.
+2. Click on the button `Azure Active Directory B2C`.
 
 
 ![Portal Sign In](resource/portal-signin.png "Portal Sign In")
 
-3. Click in `Sign up now` as shown in the bottom of the image.
+3. Click on `Sign up now` as shown in the bottom of the image.
 
 ![Portal B2C Sign In](resource/portal-b2c-signin.png "Portal B2C Sign In")
 
 4. Fill out the email.
-5. Click in `Send verification code` and a text box will open, text there the confirmation code you got in your email.
+5. Click on `Send verification code` and a text box will open, text there the confirmation code you got in your email.
 6. Fill out the password.
 7. Fill out the password confirmation.
 8. Fill out the given name, for making it easier for identify the company, please add here the name of the company.
 9. Fill out the person or team responsible for the onboarding(Not mandatory).
-10. Click in create and the account will be created
+10. Click on create and the account will be created
 
 ![Portal B2C Sign UP](resource/portal-signup.png "Portal B2C Sign UP")
 
@@ -48,30 +48,30 @@ That is the first step of the onboarding process, after that the Partner API Tec
 Once you are signed in on the API portal, you can explore the APIs and Products associate to your account, as well
 access you subscription key.
 
-1. Click in one of the buttons to access the API page.
+1. Click on one of the buttons to access the API page.
 
 ![Portal APIs Menu](resource/portal-menu-api.png "Portal APIs Menu")
 
-2. Partner API will be listed(In case not please contact [the tech team](Contacts.md)), click in `partner-api`.
+2. Partner API will be listed(In case not please contact [the tech team](Contacts.md)), Click on `partner-api`.
 
 ![Portal APIs](resource/portal-apis.png "Portal APIs")
 
-3. Not you can see the operations available.
+3. Now you can see the API endpoints available.
 4. You can choose a visualization for the definition as well download the OpenAPI definition file.
 5. You can see the schema of the API, request, response, etc...
 
 
 ![Portal APIs](resource/portal-operations.png "Portal APIs")
 
-As mentioned before you also can see the subscription key associate to your account.
-1. Click in `Profile` menu.
+As mentioned before you also can see the subscription key associated to your account.
+1. Click on `Profile` menu.
 2. And you can display or regenerate your Subscription Key.
 
 ![Portal Profile](resource/portal-profile.png "Portal Profile")
 
 ## Testing the APIs
 
-Azure portal allow you also to try out the operations directly from the portal,
+Azure portal allows you also to try out the operations directly from the portal,
 
 For trying out API call you can go to the APIs page(as already depicted in the previous section).
 
@@ -79,7 +79,7 @@ For calling all the endpoints in Partner API we need first get the OAuth2 token,
 The process for getting the token is depicted below:
 
 1. Inside partner APi select on the left side, `token` operation.
-2. Click in`Try it` on the right side of the screen.
+2. Click on`Try it` on the right side of the screen.
 
 ![Try out](resource/portal-try.png "Try out")
 
@@ -94,9 +94,9 @@ dropbox.
 
 7. Scrolling down in the panel you will see a dropbox where you can select a client request, you will be able to see the request in the selected client.
 Curl, or Java, Python, etc.
-8. Click in the button `send` and it will send the request.
+8. Click on the button `send` and it will send the request.
 
-![Token Request](resource/portal-token-request.png "Token Request")
+![Token Request](resource/portal-token-request2.png "Token Request")
 
 8.1 All the operations in Partner API requires mTLS, meaning that you need to provide the certificate for calling any operation.
 This is the same certificate that you would have uploaded for your APIM service and added to the trusted list in the certificate store of your workstation.
