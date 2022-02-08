@@ -2,10 +2,11 @@
 # APIs
 ## API Portal
 ### Development
+
 ```https://api-portal.sandbox.lendico.de```
 
 ### Production
-```api-portal.lendico.de```
+upon request
 
 ## Endpoints
 ### Development

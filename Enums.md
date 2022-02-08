@@ -93,3 +93,11 @@ Accepted product code
 | Value                         | Description                              |
 |-------------------------------|------------------------------------------|
 | TERM_LOAN_EQUAL_INSTALLMENT   | Product code for term loan installment   |
+
+## <a name="tb-status"></a> Application Status
+Application Status for the application response
+
+| Value    | Description                                                                |
+|----------|----------------------------------------------------------------------------|
+| RECEIVED | The application passed in the hard criteria and was received by sales team |
+| REJECTED | The application was rejected due to not passing in the hard criteria       |

@@ -2,7 +2,8 @@
 # Samples and Tutorials
 The code snippet provided on this page are only for exemplification purpose, as tutorial, it makes sense to keep it simple for easy understanding 
 and making easy to display code snippet, so code quality, security, libraries, etc. should not be taken for granted.
-
+# Postman collection 
+you can find the postman collection [here](https://www.getpostman.com/collections/45d35533417147f71979).
 # Java Apache HttpClient full implementation of a client
 Below you find am example of a complete client for partner API, adding certificate for client side, using OAuth2 authorization, and subscription key in the header
 ```
@@ -31,7 +32,7 @@ public class PartnerAPIClient {
     private static final String KEYSTORE_PATH = "changed to your certificate path, file e.g certificate.p12"; 
     private static final String CLIENT_ID = "change for you client id";
     private static final String CLIENT_SECRET = "change for you client secret"; 
-    private static final String PARTNER_API_BASE_URL = "https://api.sandbox.lendico.de/partner-api/"; 
+    private static final String PARTNER_API_BASE_URL = "https://api.sandbox.lendico.de/partner-api"; 
     private static final String TOKEN_URL = PARTNER_API_BASE_URL + "/oauth2/token";
     private static final String SUBSCRIPTION_KEY = "change to your subscription key"; 
 
@@ -101,6 +102,27 @@ class Token {
 }
     
 ```
+
+
+# Generating Self-Signed certificate with openssl
+
+
+#1. Generate a new RSA private key. 
+#The password of the private key can be entered during execution of the command(due arg stdin), avoiding it to be listed in the shell history.
+```openssl genrsa -out server.key -passout stdin 2048```
+
+#2. Generate the X.509 Certificate Signing Request
+```openssl req -sha256 -new -key server.key -out server.csr```
+
+#3. Sign the X.509 certificate with your own private key
+```openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server_public.crt```
+
+#4. Pack the key and the crt file into a pfx file to send to us.
+```openssl pkcs12 -export -out server.pfx -inkey server.key -in server_public.crt```
+NOTE: In the step 4 will ask you for a password for packing the files into PFX file, in case you use a password here you will need to send us the password.
+
+# In case using java as in the tutorial example, you can generate a pkcs12 file for the key store as below
+```openssl pkcs12 -export -in server_public.crt -inkey server.key -out server-cert.p12```
 
 # Generating pfx file from key and certificate
 For generating pfx file from key and certificate you can follow the following steps using `openssl`

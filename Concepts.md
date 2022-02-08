@@ -22,7 +22,7 @@ An institution that partner with ING business banking:
 ## Prospect
 A company that the data is being submitted for evaluation(Potential Customer).
 
-## Business Development Team
+## Partner Management Team
 The team responsible for Partner onboarding.
 
 ## Sales Team
