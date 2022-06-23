@@ -26,11 +26,11 @@ The roles of the representative
 
 ## <a name="tb-salutation"></a> Salutation
 
-| Value     | Description               |
-|-----------|---------------------------|
-| MR        | Mister                    |
-| MRS       | Mistress                  |
-| UNKNOWN   | Unknown                   |
+| Value   | Description |
+|---------|-------------|
+| MR      |             |
+| MRS     |             |
+| UNKNOWN |             |
 
 
 ## <a name="tb-legal-form"></a>  Legal Forms
@@ -74,11 +74,11 @@ German legal forms
 ## <a name="tb-bookkeeping"></a>  Bookkeeping Standard
 German bookkeeping standard of financial documents
 
-| Value      | Description               |
-|------------|---------------------------|
-| HGB_ESTR   | Mister                    |
-| ESTG       | Mistress                  |
-| UNKNOWN    | Unknown                   |
+| Value      | Description |
+|------------|-------------|
+| HGB_ESTR   |             |
+| ESTG       |             |
+| UNKNOWN    |             |
 
 ## <a name="tb-credit-score-type"></a>  Credit Score Type
 Types of credit score accepted

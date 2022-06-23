@@ -84,9 +84,11 @@ We use mTLS meaning that for calling the API you need to provide a valid certifi
 You need to add the certificate to the request. See an example of mTLS implementation java client on the [Tutorials Page](Tutorials.md).
 
 ### Certificate Requirements.
-Requirements for the TLS certificate
-* Public key algorithm should be RSA-2048 bits or higher.
-* Signature algorithm should be SHA-256 bits or higher.
+Requirements for the TLS and HTTP Signature certificates
+
+* The certificate lifespan must not exceed 39 months.
+* Public key algorithm must be RSA-2048 bits or higher.
+* Signature algorithm: SHA-256 bits or higher.
 
 See how to generate a self-signed certificate on the [Tutorials Page](Tutorials.md)
 or you can use official signed by a commercial CA in case you have.
