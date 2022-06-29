@@ -10,14 +10,16 @@ In case you are eligible for using the API, we will start the API Onboarding.
 
 # 1.2 API Onboarding
 
-After the business Onboarding, comes the technical Onboarding, which is composed of the below steps:
-* First you should create an account in the [API Portal](https://api-portal.sandbox.lendico.de), see how to sign up [here](ApiPortal.md).
-* Then we will request the list IPs address from where the Partner API will get the calls, 
-for whitelisting them on our API.
-And to perform mTLS communication, we will also request the client certificate in the format `pfx`, e.g `certificate.pfx`(for more information how to create a `pfx` file from your certificate go to the [tutorials page](Tutorials.md).)
-  see also the certificate specification in [the mTLS section of the security page](Security.md).
-* After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md). 
+Before you can access Partner API, you first need to authenticate your application and retrieve an access token.
+Partner API authenticates clients with the use of public key cryptography and uses OAuth 2.0 [RFC6749](https://datatracker.ietf.org/doc/html/rfc6749) as industry-standard protocol for authorization.
 
+So some tasks need to be done before we can go ahead and try out any requests to the Partner API.
+You need the following steps:
+* First, you should create an account in the [API Portal](https://api-portal.sandbox.lendico.de), see how to sign up [here](ApiPortal.md).
+* Then we will request: 
+  * List IPs address from where the Partner API will get the calls, for whitelisting them on our API.
+  * We need two different PKI key pairs. You can use official CA signed certificates, or use so called 'Self signed' certificates. The certificate format should be  `pfx`, e.g `certificate.pfx`(for more information on how to create a `pfx` file from your certificate go to the [tutorials page](Tutorials.md).). See also the certificate specification in [the mTLS section of the security page](Security.md).
+* After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md). 
 
 # 2. Study this Guide
 Read this guide to understand how to use the API.
