@@ -256,9 +256,9 @@ function signRequest(request, privateKey) {
 ###############################################################################
 
 
-keyId="e77d776b-90af-4684-bebc-521e5b2614dd" # client_id as provided 
-subscriptionKey="171bda0be8914b5fb99ad7faa14a860d" # Subscrption key
-certPath="/Users/claudioaugustodepauloresende/Documents/lendico/dev/" # path of the certificates and keys
+keyId="CLIENT_ID" # client_id as provided 
+subscriptionKey="SUBSCRIPTION_KEY" # Subscrption key
+certPath="certPath/" # path of the certificates and keys
 
 httpHost="https://api.sandbox.lendico.de/partner-api"
 

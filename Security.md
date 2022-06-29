@@ -73,7 +73,7 @@ See an example of OAuth2 implementation client in the [Tutorials Page](Tutorials
 The Authentication part is composed of Mutual TLS (typical end-point authentication and encryption) and 
 HTTP Request signing (application level authentication and integrity) which is described in [HTTP Signatures Draft RFC version 10](https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures-10).
 
-To secure the connection to our APIs, we require TLS Client Authentication and HTTP message signing for both authentication and end-to-end data integrity. For TLS Client Authentication, use your TLS client certificate or eIDAS Qualified website certificate supporting PSD2. For HTTP message signing, use your HTTP Signing certificate or eIDAS Qualified seal certificate supporting PSD2.
+To secure the connection to our APIs, we require TLS Client Authentication and HTTP message signing for both authentication and end-to-end data integrity. For TLS Client Authentication, use your TLS client certificate. For HTTP message signing, use your HTTP Signing certificate.
 
 Two X.509 public key certificates are required for authentication:
 
@@ -93,7 +93,6 @@ Requests without or with invalid certificates will be rejected with HTTP status 
 ```
 
 You need to add the certificate to the request and sign the message. See an example for both using java client on the [Tutorials Page](Tutorials.md).
-
 
 ### Certificate Requirements.
 Requirements for the TLS and HTTP Signature certificates
@@ -120,7 +119,24 @@ Example digest header for an empty body:
 ```
 Digest: SHA-256=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
 ```
+You will receive error in case invalid digest
+```
+{
+    "type": "https://lendico.github.io/partner-api-documentation/",
+    "title": "Unauthorized",
+    "status": 400,
+    "detail": "Request was malformed or otherwise invalid - [Provided payload digest diverge of provided digest]."
+}
+```
 
+```
+{
+    "type": "https://lendico.github.io/partner-api-documentation/",
+    "title": "Unauthorized",
+    "status": 400,
+    "detail": "Request was malformed or otherwise invalid - [Digest Header]."
+}
+```
 ### 2. Set the date header to the current date and time
 
 The Date header requires the current date in the HTTP standard Date header format [(see RFC7231)](https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.1.2).
@@ -132,7 +148,25 @@ Example Date header:
 ```
 Date: Wed, 03 Jul 2019 08:28:28 GMT
 ```
+You will get an error in case providing invalid date header
+e.g
+```
+{
+    "type": "https://lendico.github.io/partner-api-documentation/",
+    "title": "Unauthorized",
+    "status": 401,
+    "detail": "Difference between current GMT time and the Date header is more than 3 minutes allowed]."
+}
+```
 
+```
+{
+    "type": "https://lendico.github.io/partner-api-documentation/",
+    "title": "401",
+    "status": 400,
+    "detail": "Request was malformed or otherwise invalid - [Date Header]."
+}
+```
 ### 3. Create and sign the signing string
 
 For creating the signing string, follow the guide in [Section 2.3](https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures-10#section-2.3) of the HTTP Signatures Draft RFC. So for the HTTP Signing flow you need:
@@ -168,10 +202,18 @@ For the initial authentication request to get an application access token (Clien
 So Instead the above header you need to use :
 
 ```
-Authorization: Signature keyId="[CLIENT_ID or eIDAS_SERIAL_CA_IDENTIFIER]",algorithm="rsa-sha256", headers="(request-target) date digest", signature="[SIGNATURE_VALUE]"
+Authorization: Signature keyId="[CLIENT_ID]",algorithm="rsa-sha256", headers="(request-target) date digest", signature="[SIGNATURE_VALUE]"
 ```
 
-See section Client Credentials flow of this document for more information.
+You will get an error in case the signature is invalid, signed with different certificate from the one provided, or has different structure than required:
+```
+{
+    "type": "https://lendico.github.io/partner-api-documentation/",
+    "title": "Signature could not be successfully verified.",
+    "status": 401,
+    "detail": "Either the signature is malformed or the information required for constructing that signature is invalid or erroneous, please check the documentation."
+}
+```
 
 Tips and common mistakes
 
@@ -180,3 +222,4 @@ Tips and common mistakes
 * During the signature string construction, For (request-target) the value must be carefully created ( lowercase only the :method pseudo-header and not the :path pseudo-header; include also the query parameters into the :path pseudo-header). For more details check [Section 2.3](https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures-10#section-2.3) from the draft specification.
 * When constructing the signing string, the \n character is a LF (line-feed) character not a LF CR (line-feed carriage-return, like on Windows)
 * Strip any leading or trailing white space from the headers before you use them
+

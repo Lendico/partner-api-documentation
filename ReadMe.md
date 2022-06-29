@@ -20,7 +20,7 @@
   * [Throttling](Security.md) 
   * [Subscription Key](Security.md) 
   * [Authorization](Security.md)   
-  * [mTLS](Security.md) 
+  * [Authentication](Security.md) 
 * [Idempotency](Idempotency.md) 
 * [Versioning](Versioning.md) 
 * [Contact](Contacts.md)
