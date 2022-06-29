@@ -34,3 +34,6 @@ See [Application API Page](ApplicationApi.md)
 See [Test API Page](TestApi.md)
 ## Token API
 See [Token API Page](TokenApi.md)
+
+# Postman collection
+you can find the postman collection [here](https://www.getpostman.com/collections/45d35533417147f71979).

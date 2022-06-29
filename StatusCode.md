@@ -9,7 +9,7 @@ Possible HTTP status code returned by partner API
 | 200         | Response OK                                                                           |
 | 201         | Resource created                                                                      |
 | 202         | Request accepted for processing                                                       |
-| 400         | Bad request parameters or fields, see [Common Errors](CommonErros.md)                 |
+| 400         | Bad request parameters or fields, see [Common Errors](CommonErros.md)                 |
 | 401         | Client authentication failed and  missing or invalid subscription key                 |
 | 403         | Resource authorization failed                                                         |
 | 404         | Resource not found                                                                    |

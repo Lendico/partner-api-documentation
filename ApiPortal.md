@@ -48,24 +48,24 @@ That is the first step of the onboarding process, after that the Partner API Tec
 Once you are signed in on the API portal, you can explore the APIs and Products associate to your account, as well
 access you subscription key.
 
-1. Click on one of the buttons to access the API page.
+1  Click on one of the buttons to access the API page.
 
 ![Portal APIs Menu](resource/portal-menu-api.png "Portal APIs Menu")
 
-2. Partner API will be listed(In case not please contact [the tech team](Contacts.md)), Click on `partner-api`.
+2 Partner API will be listed(In case not please contact [the tech team](Contacts.md)), Click on `partner-api`.
 
 ![Portal APIs](resource/portal-apis.png "Portal APIs")
 
-3. Now you can see the API endpoints available.
-4. You can choose a visualization for the definition as well download the OpenAPI definition file.
-5. You can see the schema of the API, request, response, etc...
+3 Now you can see the API endpoints available.
+4 You can choose a visualization for the definition as well download the OpenAPI definition file.
+5 You can see the schema of the API, request, response, etc...
 
 
 ![Portal APIs](resource/portal-operations.png "Portal APIs")
 
 As mentioned before you also can see the subscription key associated to your account.
-1. Click on `Profile` menu.
-2. And you can display or regenerate your Subscription Key.
+1 Click on `Profile` menu.
+2 And you can display or regenerate your Subscription Key.
 
 ![Portal Profile](resource/portal-profile.png "Portal Profile")
 
@@ -78,23 +78,23 @@ For trying out API call you can go to the APIs page(as already depicted in the p
 For calling all the endpoints in Partner API we need first get the OAuth2 token, for sending in the `Authorization` header.
 The process for getting the token is depicted below:
 
-1. Inside partner APi select on the left side, `token` operation.
-2. Click on`Try it` on the right side of the screen.
+1 Inside partner APi select on the left side, `token` operation.
+2 Click on`Try it` on the right side of the screen.
 
 ![Try out](resource/portal-try.png "Try out")
 
-3. A panel on the right side will open up.
-4. Considering that you have already been onboarded on the API, your subscription will automatically appear on the
+3 A panel on the right side will open up.
+4 Considering that you have already been onboarded on the API, your subscription will automatically appear on the
 dropbox.
-5. Make sure you have the same headers as displayed on the picture `Content-Type` and`Subscription-key`.
-6. Add in the `Raw` body input box the `client_id` and `client_secret` in the following format:
+5 Make sure you have the same headers as displayed on the picture `Content-Type` and`Subscription-key`.
+6 Add in the `Raw` body input box the `client_id` and `client_secret` in the following format:
    `client_id={client_id}&client_secret={client_secret}`
 
 ![Token Request](resource/portal-token-request.png "Token Request")
 
-7. Scrolling down in the panel you will see a dropbox where you can select a client request, you will be able to see the request in the selected client.
+7 Scrolling down in the panel you will see a dropbox where you can select a client request, you will be able to see the request in the selected client.
 Curl, or Java, Python, etc.
-8. Click on the button `send` and it will send the request.
+8 Click on the button `send` and it will send the request.
 
 ![Token Request](resource/portal-token-request2.png "Token Request")
 
@@ -105,7 +105,7 @@ It varies from OS to OS, e.g for Macbook you can find how to add it [here](https
 
 Once you have added it to the certificate store of your workstation, you can add it to the request in the portal.
 When you click on `send` the portal will display a popup requesting you to select a certificate for sending using it in the endpoint call, if you do not select it or select a wrong one, the request will fail due missing certificate,
-see more in mTLS section of the [security page](Security.md).
+see more in mTLS [here](Security.html#authentication).
 
 Tip: In case you missed the popup for selecting the certificate, or select the wrong certificate, you can always open the portal again in incognito tab and the \
 popup will appear again.
@@ -115,13 +115,13 @@ popup will appear again.
 ![Token Popup](resource/portal-cert-popup.png "Token Popup")
 
 
-9. Now you can copy the `token` obtained here and use it request.
+9 Now you can copy the `token` obtained here and use it request.
 
 ![Token Response](resource/portal-token-response.png "Token Response")
 
-10. Now you can call the API endpoints with the `Authorization` header.
+10 Now you can call the API endpoints with the `Authorization` header.
 For example the `ping` endpoint.
-11. Do not forget to add the header on the panel on the left side as shown in the below picture.
+11 Do not forget to add the header on the panel on the left side as shown in the below picture.
 
 ![Token Request](resource/portal-ping-request.png "Token Request")
 

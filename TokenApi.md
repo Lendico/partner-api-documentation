@@ -25,4 +25,4 @@ for example :
 }
 ```
 ## Implementation
-See more [here](Tutorials.md)
+See more [here](Tutorials.html#java-apache-httpclient-full-implementation-of-a-client)

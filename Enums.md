@@ -1,5 +1,16 @@
 # Partner API
 
+## <a name="tb-term-units"></a>  Term units
+The type of address that is being provide
+
+| Value | Description                   |
+|-------|-------------------------------|
+| DAY   | For term provided in days     |
+| WEEK  | For term provided in weeks    |
+| MONTH | For term provided in months   |
+| YEAR  | For term provided in year     |
+
+
 ## <a name="tb-address-type"></a>  Address Types
 The type of address that is being provide
 
@@ -71,14 +82,14 @@ German legal forms
 | VEREIN                                |                                                                                                | 
 | WIRTSCHAFTLICHE_ZWECKGEMEINSCHAFT     |                                                                                                | 
 
-## <a name="tb-bookkeeping"></a>  Bookkeeping Standard
+## <a name="tb-bookkeeping"></a>  Bookkeeping Standard - Annual financial statement
 German bookkeeping standard of financial documents
 
-| Value      | Description |
-|------------|-------------|
-| HGB_ESTR   |             |
-| ESTG       |             |
-| UNKNOWN    |             |
+| Value      | Description                                             |
+|------------|---------------------------------------------------------|
+| HGB_ESTR   | Bilanz                                                  |
+| ESTG       | Net income statement: Einnahmenüberschussrechnung (EÜR) |
+| UNKNOWN    |                                                         |
 
 ## <a name="tb-credit-score-type"></a>  Credit Score Type
 Types of credit score accepted

@@ -2,35 +2,25 @@
 # Samples and Tutorials
 The code snippet provided on this page are only for exemplification purpose, as tutorial, it makes sense to keep it simple for easy understanding 
 and making easy to display code snippet, so code quality, security, libraries, etc. should not be taken for granted.
-# Postman collection 
+## Postman collection 
 you can find the postman collection [here](https://www.getpostman.com/collections/45d35533417147f71979).
-# Java Apache HttpClient full implementation of a client
+## Java Apache HttpClient full implementation of a client
 Below you find am example of a complete client for partner API, adding certificate for client side, using OAuth2 authorization, and subscription key in the header
 
 ```
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.apache.http.ssl.SSLContexts;
-
 import javax.net.ssl.SSLContext;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.io.*;
+import java.net.*;
+import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.cert.CertificateException;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PartnerAPIClient {
@@ -50,7 +40,6 @@ public class PartnerAPIClient {
         keyStore.load(new FileInputStream(KEYSTORE_PATH), KEYSTORE_PASSWORD.toCharArray());
         pingRequest();
     }
-
 
     private static void pingRequest() throws GeneralSecurityException, IOException, InterruptedException {
 
@@ -162,7 +151,6 @@ public class PartnerAPIClient {
     private static PrivateKey getMessageSigningPrivateKey() throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
         return (PrivateKey) keyStore.getKey("message-signing", KEYSTORE_PASSWORD.toCharArray());
     }
-
 }
 
 @Data
@@ -183,10 +171,10 @@ class Token {
    
 ```
 
-# Postman script for signing request
+## Postman script for signing request
 Bear in mind 3 things Ffor this code to work :
-1. You need to install the `pmlib` for this refer this link https://joolfe.github.io/postman-util-lib/
-basically you just need to import this collection https://github.com/joolfe/postman-util-lib/blob/master/postman/PostmanUtilityLibv21.postman_collection.json, 
+1. You need to install the `pmlib` for this refer this link [https://joolfe.github.io/postman-util-lib/](https://joolfe.github.io/postman-util-lib/)
+basically you just need to import this collection [https://github.com/joolfe/postman-util-lib/blob/master/postman/PostmanUtilityLibv21.postman_collection.json](https://github.com/joolfe/postman-util-lib/blob/master/postman/PostmanUtilityLibv21.postman_collection.json), 
 and run the method install.
 2. You need to add the env variables private_key - for filling the variable you can open the private key(any text editor) of your message signing certificate and copy and paste the content.
 3. And fill out apim_client_id env variable with your client id.
@@ -196,16 +184,22 @@ eval( pm.globals.get('pmlib_code') );
 var CryptoJS = require("crypto-js");
 var moment = require("moment");
 
-const privateKey = pm.environment.get("private_key")
-const clientId = pm.environment.get("apim_client_id")
+const privateKey = pm.collectionVariables.get("private_key");
+const clientId = pm.collectionVariables.get("apim_client_id");
+const clientSecret = pm.collectionVariables.get("apim_client_secret");
 
 signRequest(pm.request, privateKey);
 
 function signRequest(request, privateKey) {
     const method = request.method.toLowerCase();
     const path = request.url.getPathWithQuery().replace("/partner-api","");
-    const bodyPostman = JSON.stringify((request.body || ""));
-    var body = JSON.parse(bodyPostman).raw;
+    var body;
+    if(path.includes("oauth2/token")){
+        body =`client_id=${clientId}&client_secret=${clientSecret}`;
+    }else {
+        const bodyPostman = JSON.stringify((request.body || ""));
+        body = JSON.parse(bodyPostman).raw;
+    }
     const date = moment.utc().format("ddd, DD MMM yyyy HH:mm:ss Z");
     const bodyEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(body));
     const digest = `SHA-256=${bodyEncoded}`;
@@ -243,9 +237,9 @@ function signRequest(request, privateKey) {
 ```
 
 
-# Curl example for calling the API
+## Curl example for calling the API
 
-## Token Request
+### Token Request
 ```
 #!bin/bash
 
@@ -298,7 +292,7 @@ signature=`printf %s "$signingString" | openssl dgst -sha256 -sign "${certPath}m
 
 ```
 
-## Ping Request 
+### Ping Request 
 
 ```
 #!/bin/bash
@@ -346,29 +340,29 @@ curl -i -X GET "${httpHost}${reqPath}" \
 --cert "${certPath}client-tls.crt" \
 --key "${certPath}client-tls.key"
 ```
-# Generating Self-Signed certificate with openssl
+## Generating Self-Signed certificate with openssl
 
 
-#1. Generate a new RSA private key. 
-#The password of the private key can be entered during execution of the command(due arg stdin), avoiding it to be listed in the shell history.
+1 Generate a new RSA private key. 
+The password of the private key can be entered during execution of the command(due arg stdin), avoiding it to be listed in the shell history.
 
 ```
 openssl genrsa -out server.key -passout stdin 2048
 ```
 
-#2. Generate the X.509 Certificate Signing Request
+2 Generate the X.509 Certificate Signing Request
 
 ```
 openssl req -sha256 -new -key server.key -out server.csr
 ```
 
-#3. Sign the X.509 certificate with your own private key
+3 Sign the X.509 certificate with your own private key
 
 ```
 openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server_public.crt
 ```
 
-#4. Pack the key and the crt file into a pfx file to send to us.
+4 Pack the key and the crt file into a pfx file to send to us.
 
 ```
 openssl pkcs12 -export -out server.pfx -inkey server.key -in server_public.crt
@@ -376,13 +370,13 @@ openssl pkcs12 -export -out server.pfx -inkey server.key -in server_public.crt
 
 NOTE: In the step 4 will ask you for a password for packing the files into PFX file, in case you use a password here you will need to send us the password.
 
-# In case using java as in the tutorial example, you can generate a pkcs12 file for the key store as below
+## In case using java as in the tutorial example, you can generate a pkcs12 file for the key store as below
 
 ```
 openssl pkcs12 -export -in server_public.crt -inkey server.key -out server-cert.p12
 ```
 
-# Generating pfx file from key and certificate
+### Generating pfx file from key and certificate
 For generating pfx file from key and certificate you can follow the following steps using `openssl`
 
 ```
