@@ -365,10 +365,10 @@ openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out serv
 4 Pack the key and the crt file into a pfx file to send to us.
 
 ```
-openssl pkcs12 -export -out server.pfx -inkey server.key -in server_public.crt
+openssl pkcs12 -export -nokeys -in server_public.crt -out server.pfx
 ```
 
-NOTE: In the step 4 will ask you for a password for packing the files into PFX file, in case you use a password here you will need to send us the password.
+NOTE: In the step 4 will ask you for a password for packing the file into PFX file, in case you use a password here you will need to send us the password.
 
 ## In case using java as in the tutorial example, you can generate a pkcs12 file for the key store as below
 
@@ -380,7 +380,7 @@ openssl pkcs12 -export -in server_public.crt -inkey server.key -out server-cert.
 For generating pfx file from key and certificate you can follow the following steps using `openssl`
 
 ```
-openssl pkcs12 -export -out domain.name.pfx -inkey domain.name.key -in domain.name.crt
+openssl pkcs12 -export -nokeys -in domain.name.crt -out domain.name.pfx
 ```
 
 If you have a root CA and intermediate certs, then include them as well using multiple -in params
@@ -392,5 +392,5 @@ openssl pkcs12 -export -out domain.name.pfx -inkey domain.name.key -in domain.na
 Example:
 
 ```
-openssl pkcs12 -export -out client-certificate.pfx -inkey client-key.key -in client-cert.crt
+openssl pkcs12 -export -nokeys -in server_public.crt -out server.pfx
 ```
