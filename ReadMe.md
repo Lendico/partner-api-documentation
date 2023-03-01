@@ -3,7 +3,8 @@
 # Contents [(Version History)](History.md)
 
 * [What is Partner API](Introduction.md)
-    *  [Concepts](Concepts.md)
+    * [Concepts](Concepts.md)
+    * [Statuses](Statuses.md)
 * [Getting started](Onboarding.md)
   * [Partner Onboarding](Onboarding.md)
   * [APIs Overview](Apis.md)

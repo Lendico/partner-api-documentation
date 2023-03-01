@@ -713,6 +713,6 @@ Credit score information
 | application_id    | string    | Id of the application                                                               | `de.ing.business.application.eb237cea-1f7d-4e87-9a45-53ee3665b5fa` |
 | last_updated_at   | date-time | The last time that the application was modified                                     | `2021-12-06T08:26:38.458Z`                                         |
 | last_updated_by   | string    | Last actor that modified the application                                            | `PARTNER`                                                          |
-| status            | enum      | The status of the application<br>see [status](Enums.html#-application-status)       | `REJECTED`                                                         |
+| status            | enum      | The status of the application<br>see [status](Enums.html#-application-statuses)     | `REJECTED`                                                         |
 
 Note: The difference between a rejected application response and a non-rejected one is the `status` (`REJECTED`) and the addition of the `rejection_reasons` data point to the response DTO.

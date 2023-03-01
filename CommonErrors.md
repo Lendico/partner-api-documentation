@@ -77,15 +77,16 @@ or
 }
 ```
 
-Note that the difference between a rejected application response and a non rejected one is the `status` (`REJECTED`) and the addition of the `rejection_reasons` data point to the response DTO.
+Note that the difference between a rejected application response and a non-rejected one is the `status` (`REJECTED`) and the addition of the `rejection_reasons` data point to the response DTO.
 
                                                                          
-| Rejection reason           | Description                                                      |
-|----------------------------|------------------------------------------------------------------|
-| COMPANY_REVENUE_TOO_LOW    | The company must have at least 50k € revenue.                    |
-| COMPANY_TOO_YOUNG          | The company must be at least two years old.                      |
-| POOR_COMPANY_CREDIT_SCORE  | The company has a poor credit score.                             |
-| BAD_LEGAL_FORM             | The company’s legal form is not accepted.                        |
-| BAD_INDUSTRY_CODE          | At least one of the company’s industry codes are not acceptable. |
-| COMPANY_LOCATION           | The company must be located in Germany.                          |
-| COMPANY_CREFO_ID_NOT_FOUND | The company was not found in crefo                               |
+| Rejection reason           | Description                                                                                   |
+|----------------------------|-----------------------------------------------------------------------------------------------|
+| COMPANY_REVENUE_TOO_LOW    | The company must have at least 50k € revenue.                                                 |
+| COMPANY_TOO_YOUNG          | The company must be at least two years old.                                                   |
+| POOR_COMPANY_CREDIT_SCORE  | The company has a poor credit score.                                                          |
+| BAD_LEGAL_FORM             | The company’s legal form is not accepted.                                                     |
+| BAD_INDUSTRY_CODE          | At least one of the company’s industry codes are not acceptable.                              |
+| COMPANY_LOCATION           | The company must be located in Germany.                                                       |
+| COMPANY_CREFO_ID_NOT_FOUND | The company was not found in crefo.                                                           |
+| INTERNAL_REASON            | The company was rejected in one of the screening phases due a internal reason(e.g risk check) |

@@ -1,6 +1,7 @@
 # Partner API
 
 ## <a name="tb-term-units"></a>  Term units
+
 The type of address that is being provide
 
 | Value | Description                   |
@@ -10,8 +11,8 @@ The type of address that is being provide
 | MONTH | For term provided in months   |
 | YEAR  | For term provided in year     |
 
-
 ## <a name="tb-address-type"></a>  Address Types
+
 The type of address that is being provide
 
 | Value     | Description               |
@@ -21,6 +22,7 @@ The type of address that is being provide
 | MAILING   | In case mailing address   |
 
 ## <a name="tb-roles"></a>  Representative Roles
+
 The roles of the representative
 
 | Value               | Description                                                                      |
@@ -34,7 +36,6 @@ The roles of the representative
 | BORROWER            | Company's Borrower                                                               |
 | INVESTOR            | Company's Investor                                                               |
 
-
 ## <a name="tb-salutation"></a> Salutation
 
 | Value   | Description |
@@ -42,7 +43,6 @@ The roles of the representative
 | MR      |             |
 | MRS     |             |
 | UNKNOWN |             |
-
 
 ## <a name="tb-legal-form"></a>  Legal Forms
 
@@ -83,6 +83,7 @@ German legal forms
 | WIRTSCHAFTLICHE_ZWECKGEMEINSCHAFT     |                                                                                                | 
 
 ## <a name="tb-bookkeeping"></a>  Bookkeeping Standard - Annual financial statement
+
 German bookkeeping standard of financial documents
 
 | Value      | Description                                             |
@@ -92,6 +93,7 @@ German bookkeeping standard of financial documents
 | UNKNOWN    |                                                         |
 
 ## <a name="tb-credit-score-type"></a>  Credit Score Type
+
 Types of credit score accepted
 
 | Value      | Description           |
@@ -99,16 +101,22 @@ Types of credit score accepted
 | CREFO      | Crefo credit score    |
 
 ## <a name="tb-product-code"></a> Product code
+
 Accepted product code
 
 | Value                         | Description                              |
 |-------------------------------|------------------------------------------|
 | TERM_LOAN_EQUAL_INSTALLMENT   | Product code for term loan installment   |
 
-## <a name="tb-status"></a> Application Status
-Application Status for the application response
+## <a name="tb-status"></a> Application Statuses
 
-| Value    | Description                                                                |
-|----------|----------------------------------------------------------------------------|
-| RECEIVED | The application passed in the hard criteria and was received by sales team |
-| REJECTED | The application was rejected due to not passing in the hard criteria       |
+Possible states of the application
+
+| Value      | Description                                                                        |
+|------------|------------------------------------------------------------------------------------|
+| CREATED    | The application was created.                                                       |
+| RISK_CHECK | The application is in risk check.                                                  |
+| OFFER      | An offer was send to the customer.                                                 |
+| ACTIVATED  | The offer was accepted by the customer and contract was signed the loan is active. |
+| REJECTED   | The application was rejected in one of our screening phases.                       |
+| ABANDONED  | The application was abandoned by the customer.                                     |
