@@ -611,9 +611,9 @@ falls in the GDPRs rules for data deletion the application might have anonymized
 
 | Field                    | Type   | Description                                                                                                                | Example                                                      |
 |--------------------------|--------|----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| company*                 | object | The prospect's information that is applying,  <br /> see [company](ApplicationApi.html#company)                            | See [Json sytanx](ApplicationApi.html#-json-syntax-response) |
-| details*                 | object | Details of the payload, the fields vary by product, <br /> see [details](ApplicationApi.html#details)                      | See [Json sytanx](ApplicationApi.html#-json-syntax-response) |
-| partner_account_manager* | object | The partner account manager information, <br /> see [partner_account_manager](ApplicationApi.html#partner-account-manager) | See [Json sytanx](ApplicationApi.html#-json-syntax-response) |
+| company*                 | object | The prospect's information that is applying,  <br /> see [company](ApplicationApi.md#company)                            | See [Json sytanx](ApplicationApi.md#-json-syntax-response) |
+| details*                 | object | Details of the payload, the fields vary by product, <br /> see [details](ApplicationApi.md#details)                      | See [Json sytanx](ApplicationApi.md#-json-syntax-response) |
+| partner_account_manager* | object | The partner account manager information, <br /> see [partner_account_manager](ApplicationApi.md#partner-account-manager) | See [Json sytanx](ApplicationApi.md#-json-syntax-response) |
 
 ## Company
 
@@ -623,20 +623,20 @@ falls in the GDPRs rules for data deletion the application might have anonymized
 | fax                   | string   | Company's fax number                                                                                                                                               | +49 (0) XXXX XXXX-39                                             |
 | iban                  | string   | Company's IBAN                                                                                                                                                     | DEXXXXXXXXXXXXXXXXXXXX                                           |
 | bic                   | string   | Company's BIC                                                                                                                                                      | INGDDEFFXXX                                                      |
-| address*              | object   | Company's address, <br> see [address](ApplicationApi.html#address)                                                                                                 | See <br>[Json sytanx](ApplicationApi.html#-json-syntax-response) |
-| financials*           | object[] | Yearly financial data, it should have <br>at least the latest revenue<br>see [financial_data](#tb-fd-fields)<br>**Should have at least the latest financial data** | See <br>[Json sytanx](ApplicationApi.html#-json-syntax-response) |
-| representatives*      | object[] | List of company's representative,<br>see [representative](ApplicationApi.html#representative)<br>                                                                  | See <br>[Json sytanx](ApplicationApi.html#-json-syntax-response) |
-| legal_form*           | enum     | Company's legal form<br>see [legal_form](Enums.html#--legal-forms)                                                                                                 | `GmBH`                                                           |
+| address*              | object   | Company's address, <br> see [address](ApplicationApi.md#address)                                                                                                 | See <br>[Json sytanx](ApplicationApi.md#-json-syntax-response) |
+| financials*           | object[] | Yearly financial data, it should have <br>at least the latest revenue<br>see [financial_data](#tb-fd-fields)<br>**Should have at least the latest financial data** | See <br>[Json sytanx](ApplicationApi.md#-json-syntax-response) |
+| representatives*      | object[] | List of company's representative,<br>see [representative](ApplicationApi.md#representative)<br>                                                                  | See <br>[Json sytanx](ApplicationApi.md#-json-syntax-response) |
+| legal_form*           | enum     | Company's legal form<br>see [legal_form](Enums.md#--legal-forms)                                                                                                 | `GmBH`                                                           |
 | foundation_date*      | date     | Foundation date of the company                                                                                                                                     | `1977-01-12`                                                     |
-| bookkeeping_standard* | enum     | Bookkeeping standard of financial documents see [bookkeeping_standard](Enums.html#--bookkeeping-standard---annual-financial-statement)                             | `ESTG`                                                           |
-| credit_scores*        | object[] | Credit score information, right now we accept <br>only crefo.<br>see [credit_score](Enums.html#--credit-score-type)                                                | See <br>[Json sytanx](ApplicationApi.html#-json-syntax-response) |
+| bookkeeping_standard* | enum     | Bookkeeping standard of financial documents see [bookkeeping_standard](Enums.md#--bookkeeping-standard---annual-financial-statement)                             | `ESTG`                                                           |
+| credit_scores*        | object[] | Credit score information, right now we accept <br>only crefo.<br>see [credit_score](Enums.md#--credit-score-type)                                                | See <br>[Json sytanx](ApplicationApi.md#-json-syntax-response) |
 
 ## Address
 
 | Field         | Type   | Description                                                                                   | Example     |
 |---------------|--------|-----------------------------------------------------------------------------------------------|-------------|
 | city*         | string | Address city                                                                                  | Berlin      |
-| type*         | enum   | Type of address<br>see [bookkeeping_standard](Enums.html#--address-types)                     | `PRIMARY`   |
+| type*         | enum   | Type of address<br>see [bookkeeping_standard](Enums.md#--address-types)                     | `PRIMARY`   |
 | line_1*       | string | Street and number                                                                             | Nice str 1. |
 | line_2        | string | Complement for address                                                                        | `4o Flor`   |
 | country_code* | string | ISO country code(ISO 3166-1 alpha-2) <br>see https://www.iso.org/iso-3166-country-codes.html. | `DE`        |
@@ -646,12 +646,12 @@ Representative of the company
 
 | Field         | Type     | Description                                                                                                | Example                                                      |
 |---------------|----------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| roles*        | enum[]   | List of roles of the representative see [roles](Enums.html#--representative-roles)                         | `[APPLICANT, MD]`                                            |
+| roles*        | enum[]   | List of roles of the representative see [roles](Enums.md#--representative-roles)                         | `[APPLICANT, MD]`                                            |
 | title         | string   | Title of the representative                                                                                | `DR`                                                         |
-| salutation*   | enum     | Representative salutation<br>see [salutation](Enums.html#-salutation)                                      | `MRS`                                                        |
+| salutation*   | enum     | Representative salutation<br>see [salutation](Enums.md#-salutation)                                      | `MRS`                                                        |
 | email*        | string   | Email of the representative                                                                                | `4o Flor`                                                    |
 | birthday*     | date     | Date of birth of the representative                                                                        | `DE`                                                         |
-| addresses*    | object[] | List of addresses of the representative                                                                    | See [Json sytanx](ApplicationApi.html#-json-syntax-response) |
+| addresses*    | object[] | List of addresses of the representative                                                                    | See [Json sytanx](ApplicationApi.md#-json-syntax-response) |
 | nationality*  | string   | Nationality, ISO country code(ISO 3166-1 alpha-2) <br>see https://www.iso.org/iso-3166-country-codes.html. | `DE`                                                         |
 | first_name*   | string   | First name of the representative                                                                           | `Thomas`                                                     |
 | last_name*    | string   | Last name of the representative                                                                            | `Muller`                                                     |
@@ -663,8 +663,8 @@ Credit score information
 | Field   | Type     | Description                                                                               | Example      |
 |---------|----------|-------------------------------------------------------------------------------------------|--------------|
 | id*     | string   | The id of the credit provided                                                             | `2000000021` |
-| type*   | enum     | The type of credit provided<br>see [credit_type](Enums.html#--credit-score-type)          | `CREFO`      |
-| history | object[] | List of the credit score history <br>see [credit-score](ApplicationApi.html#credit-score) | `CREFO`      |
+| type*   | enum     | The type of credit provided<br>see [credit_type](Enums.md#--credit-score-type)          | `CREFO`      |
+| history | object[] | List of the credit score history <br>see [credit-score](ApplicationApi.md#credit-score) | `CREFO`      |
 
 ## Credit score
 
@@ -687,17 +687,17 @@ Credit score information
 | Field              | Type   | Description                                                                                                                    | Example                       |
 |--------------------|--------|--------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
 | purpose*           | string | The purpose of the application                                                                                                 | `Wachstumskapital`            |
-| product_code*      | enum   | Code of the product <br>see [product_code](Enums.html#-product-code)                                                           | `TERM_LOAN_EQUAL_INSTALLMENT` |
+| product_code*      | enum   | Code of the product <br>see [product_code](Enums.md#-product-code)                                                           | `TERM_LOAN_EQUAL_INSTALLMENT` |
 | currency*          | string | Currency of the requested amount<br> se https://www.iso.org/iso-4217-currency-codes.html(<br> for now it is only accepted EUR) | `EUR`                         |
 | request_amount*    | number | Amount of the request                                                                                                          | `20000.00`                    |
 | request_term*      | number | Duration of the request                                                                                                        | `12`                          |
-| request_term_unit* | enum   | Duration unit of the request <br>see [term_unit](Enums.html#--term-units)                                                      | `MONTH`                       |
+| request_term_unit* | enum   | Duration unit of the request <br>see [term_unit](Enums.md#--term-units)                                                      | `MONTH`                       |
 
 ## Partner Account Manager
 
 | Field         | Type   | Description                                                                        | Example         |
 |---------------|--------|------------------------------------------------------------------------------------|-----------------|
-| salutation*   | enum   | Partner account manager salutation<br>see <br>[salutation](Enums.html#-salutation) | `MRS`           |
+| salutation*   | enum   | Partner account manager salutation<br>see <br>[salutation](Enums.md#-salutation) | `MRS`           |
 | email*        | string | Email of the partner account manager                                               | `4o Flor`       |
 | first_name*   | string | First name of the partner account manager                                          | `Thomas`        |
 | last_name*    | string | Last name of the partner account manager                                           | `Muller`        |
@@ -709,10 +709,10 @@ Credit score information
 | Field             | Type      | Description                                                                         | Example                                                            |
 |-------------------|-----------|-------------------------------------------------------------------------------------|--------------------------------------------------------------------|
 | version           | number    | The version of the resource                                                         | `1`                                                                |
-| rejection_reasons | string[]  | List of rejections <br>see [rejection reasons](CommonErrors.html#rejection-reasons) | `[COMPANY_TOO_YOUNG]`                                              |
+| rejection_reasons | string[]  | List of rejections <br>see [rejection reasons](CommonErrors.md#rejection-reasons) | `[COMPANY_TOO_YOUNG]`                                              |
 | application_id    | string    | Id of the application                                                               | `de.ing.business.application.eb237cea-1f7d-4e87-9a45-53ee3665b5fa` |
 | last_updated_at   | date-time | The last time that the application was modified                                     | `2021-12-06T08:26:38.458Z`                                         |
 | last_updated_by   | string    | Last actor that modified the application                                            | `PARTNER`                                                          |
-| status            | enum      | The status of the application<br>see [status](Enums.html#-application-statuses)     | `REJECTED`                                                         |
+| status            | enum      | The status of the application<br>see [status](Enums.md#-application-statuses)     | `REJECTED`                                                         |
 
 Note: The difference between a rejected application response and a non-rejected one is the `status` (`REJECTED`) and the addition of the `rejection_reasons` data point to the response DTO.

@@ -66,7 +66,7 @@ and response:
 Partner API is protected by OAuth2, for sending request you need to be authorized, for doing so, as part of the API onboarding, 
 you will get the credentials for the OAuth2. 
 With the credentials, you can make a `POST` request to obtain the token, see more information in the [Token API page](TokenApi.md).
-See an example of OAuth2 implementation client in the [Tutorials Page](Tutorials.html#java-apache-httpclient-full-implementation-of-a-client).
+See an example of OAuth2 implementation client in the [Tutorials Page](Tutorials.md#java-apache-httpclient-full-implementation-of-a-client).
 
 ## Authentication
 
@@ -103,7 +103,7 @@ Requirements for the TLS and HTTP Signature certificates
 * Certificate lifespan must not exceed 39 months
 * **TLS and HTTP Signature certificates are different**
 
-See how to generate a self-signed certificate on the [Tutorials Page](Tutorials.html#generating-self-signed-certificate-with-openssl)
+See how to generate a self-signed certificate on the [Tutorials Page](Tutorials.md#generating-self-signed-certificate-with-openssl)
 or you can use official signed by a commercial CA in case you have.
 
 ### HTTP Request signing

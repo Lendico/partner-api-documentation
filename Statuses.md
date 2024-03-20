@@ -13,4 +13,4 @@ status
 
 ### <a name="tb-status"></a> Application Statuses
 
-For the description of each status you can check out [this page](Enums.html#-application-statuses).
+For the description of each status you can check out [this page](Enums.md#-application-statuses).

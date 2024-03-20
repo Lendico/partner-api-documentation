@@ -105,7 +105,7 @@ It varies from OS to OS, e.g for Macbook you can find how to add it [here](https
 
 Once you have added it to the certificate store of your workstation, you can add it to the request in the portal.
 When you click on `send` the portal will display a popup requesting you to select a certificate for sending using it in the endpoint call, if you do not select it or select a wrong one, the request will fail due missing certificate,
-see more in mTLS [here](Security.html#authentication).
+see more in mTLS [here](Security.md#authentication).
 
 Tip: In case you missed the popup for selecting the certificate, or select the wrong certificate, you can always open the portal again in incognito tab and the \
 popup will appear again.

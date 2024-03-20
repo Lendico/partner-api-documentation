@@ -15,11 +15,11 @@ Partner API authenticates clients with the use of public key cryptography and us
 
 So some tasks need to be done before we can go ahead and try out any requests to the Partner API.
 You need the following steps:
-* First, you should create an account in the [API Portal](https://api-portal.sandbox.lendico.de), see how to sign up [here](ApiPortal.html#sign-up).
+* First, you should create an account in the [API Portal](https://api-portal.sandbox.lendico.de), see how to sign up [here](ApiPortal.md#sign-up).
 * Then we will request: 
   * List IPs address from where the Partner API will get the calls, for whitelisting them on our API.
   * We need two different PKI key pairs. You can use official CA signed certificates, or use so called 'Self signed' certificates. The certificate format should be  `pfx`, e.g `certificate.pfx`(for more information on how to create a `pfx` file from your certificate go to the [tutorials page](Tutorials.md).). See also the certificate specification in [the Authentication section of the security page](Security.md).
-* After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.html#exploring-apis-and-profile). 
+* After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md#exploring-apis-and-profile). 
 
 ## 2 Study this Guide
 Read this guide to understand how to use the API.
@@ -29,7 +29,7 @@ In case any questions reach out to the [Partner API Tech Team or Partner API Bus
 ## 3 Request whitelisting
 For sending requests to partner API your IP needs to be whitelisted, you can request a whitelisting of your IP here [Partner APIM Tech Team](Contacts.md).
 We will send you then a subscription key that should be added in the header
-`Subscription-Key`. See more about the subscription key [here](Security.html#subscription-key).
+`Subscription-Key`. See more about the subscription key [here](Security.md#subscription-key).
 
 ## 4 Test connection and access
 For testing connectivity and access you do not need to POST any real data, you can call `GET /ping` you will get a string response `"You are connected to partner API!"` and HTTP status code 200, in case everything is working fine, in case not please contact the [Partner APIM Tech Team](Contacts.md).
