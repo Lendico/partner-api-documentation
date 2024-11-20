@@ -15,10 +15,11 @@ Partner API authenticates clients with the use of public key cryptography and us
 
 So some tasks need to be done before we can go ahead and try out any requests to the Partner API.
 You need the following steps:
-* First, you should create an account in the [API Portal](https://api-portal.sandbox.lendico.de), see how to sign up [here](ApiPortal.md#sign-up).
+* First, you should already have a microsoft AD tenent.
 * Then we will request: 
   * List IPs address from where the Partner API will get the calls, for whitelisting them on our API.
-  * We need two different PKI key pairs. You can use official CA signed certificates, or use so called 'Self signed' certificates. The certificate format should be  `pfx`, e.g `certificate.pfx`(for more information on how to create a `pfx` file from your certificate go to the [tutorials page](Tutorials.md).). See also the certificate specification in [the Authentication section of the security page](Security.md).
+  * We need two different PKI key pairs. You can use official CA signed certificates, or use so called 'Self signed' certificates. See also the certificate specification in [the Authentication section of the security page](Security.md).
+* Next, we will infrom you to create an account in the [API Portal](https://api-portal.openbusiness.ing.de/), see how to sign up [here](ApiPortal.md#sign-up).
 * After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md#exploring-apis-and-profile). 
 
 ## 2 Study this Guide
