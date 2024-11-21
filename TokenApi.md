@@ -4,7 +4,10 @@ The Token API aims to provide an endpoint for retrieve token for using partner a
 
 # Operations
 ## Token
-```POST /oauth2/token```
+### Development
+```POST https://api.accp.openbusiness.ing.de/token-api/oauth2/token```
+### Production
+```POST https://api.openbusiness.ing.de/token-api/oauth2/token```
 
 ### Headers
 Headers annotated with \* are mandatory
