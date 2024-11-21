@@ -4,7 +4,7 @@
 
 * [What is Partner API](Introduction.md)
     * [Concepts](Concepts.md)
-    * [Statuses](Statuses.md)
+    * [Application Statuses](Statuses.md)
 * [Getting started](Onboarding.md)
   * [Partner Onboarding](Onboarding.md)
   * [APIs Overview](Apis.md)
@@ -26,5 +26,4 @@
 * [Versioning](Versioning.md) 
 * [Contact](Contacts.md)
 * [Incidents and Requests](Incidents.md)
-* [Troubleshooting and Known Issues](Troubleshoot.md)
 * [Documentation History](History.md) 
