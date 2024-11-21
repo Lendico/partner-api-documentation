@@ -2,7 +2,7 @@
 
 ## <a name="tb-term-units"></a>  Term units
 
-The type of address that is being provided
+The type of address that is being provide
 
 | Value | Description                   |
 |-------|-------------------------------|

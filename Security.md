@@ -29,7 +29,7 @@ The Partner API provides some headers to help to deal with the rate limit.
  * RateLimit-Limit: containing the amount of requests allowed in a time window of 60 seconds;
  * RateLimit-Remaining: containing the remaining requests amount in the current window;
  * RateLimit-Reset: containing the time remaining in the current window for refreshing the rate limit, specified in seconds, you should try again only after those seconds.
-See more in this [draft]( https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/00/).
+See more in this [draft]( https://tools.ietf.org/id/draft-polli-ratelimit-headers-00.html).
 
 Another Throttling mechanism we use is by crefo id within a time window.
 You cannot apply using the same crefo id within the first 5 minutes from the first try, it will lead to HTTP status code `429` and the following error message:

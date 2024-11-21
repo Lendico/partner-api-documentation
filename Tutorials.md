@@ -305,7 +305,7 @@ signature=`printf %s "$signingString" | openssl dgst -sha256 -sign "${certPath}m
 keyId="2e91ff74-65c9-4590-a355-399998878d4f" # keyId is the Client ID we sent to you
 subscriptionKey="171bda0be8914b5fb99ad7faa14a860d" # Subscrption key
 
-certPath="/Users/username/Documents/ing/dev/certs/script/apim/" # path of the two pair of self-signed X.509 certificates and keys that you generated  and sent to us the pfx file
+certPath="/Users/claudioaugustodepauloresende/Documents/lendico/dev/certs/script/apim/" # path of the two pair of self-signed X.509 certificates and keys that you generated  and sent to us the pfx file
 
 httpHost="https://api.sandbox.lendico.de/partner-api"
 

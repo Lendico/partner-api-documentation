@@ -2,9 +2,9 @@
 
 # Statuses
 
-## Loan Application Statuses
+## Application Statuses
 
-### Loan Application Status Transition Diagram
+### Application Status Transition Diagram
 
 The below diagram represents the possible status for the application life cycle. You can see the description for each
 status

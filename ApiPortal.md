@@ -27,19 +27,21 @@ For signing up use an account that will be related to the system you want to int
 
 ![Portal Sign In](resource/portal-signin.png "Portal Sign In")
 
-3. In the pop-up window (make sure your browser allows pop-ups), sign-in with your Microsoft account. The creation of a Microsoft account is outside the scope if this guide. 
+3. Click on `Sign up now` as shown in the bottom of the image.
 
-![Portal Microsoft Sign In](resource/portal-ms-signin.png "Portal Microsoft Sign In")
+![Portal B2C Sign In](resource/portal-b2c-signin.png "Portal B2C Sign In")
 
-4. After signing-in with your Microsoft account, authorise Azure AD B2C App by clicking on `Accept`
-
-![Authorise Azure AD B2C App](resource/portal-b2s-authorise.png "Authorise Azure AD B2C App")
-
-5. Fill in `Display Name` you company name.
+4. Fill out the email.
+5. Click on `Send verification code` and a text box will open, text there the confirmation code you got in your email.
+6. Fill out the password.
+7. Fill out the password confirmation.
+8. Fill out the given name, for making it easier for identify the company, please add here the name of the company.
+9. Fill out the person or team responsible for the onboarding(Not mandatory).
+10. Click on create and the account will be created
 
 ![Portal B2C Sign UP](resource/portal-signup.png "Portal B2C Sign UP")
 
-That is the first step of the onboarding process, after that the Partner API Tech Team will associate the Partner API to your newly created account in API Portal.
+That is the first step of the onboarding process, after that the Partner API Tech Team will handle the subscription and the credentials and send it to you.
 
 
 ## Exploring APIs and Profile
@@ -66,5 +68,62 @@ As mentioned before you also can see the subscription key associated to your acc
 2 And you can display or regenerate your Subscription Key.
 
 ![Portal Profile](resource/portal-profile.png "Portal Profile")
+
+## Testing the APIs
+
+Azure portal allows you also to try out the operations directly from the portal,
+
+For trying out API call you can go to the APIs page(as already depicted in the previous section).
+
+For calling all the endpoints in Partner API we need first get the OAuth2 token, for sending in the `Authorization` header.
+The process for getting the token is depicted below:
+
+1 Inside partner APi select on the left side, `token` operation.
+2 Click on`Try it` on the right side of the screen.
+
+![Try out](resource/portal-try.png "Try out")
+
+3 A panel on the right side will open up.
+4 Considering that you have already been onboarded on the API, your subscription will automatically appear on the
+dropbox.
+5 Make sure you have the same headers as displayed on the picture `Content-Type` and`Subscription-key`.
+6 Add in the `Raw` body input box the `client_id` and `client_secret` in the following format:
+   `client_id={client_id}&client_secret={client_secret}`
+
+![Token Request](resource/portal-token-request.png "Token Request")
+
+7 Scrolling down in the panel you will see a dropbox where you can select a client request, you will be able to see the request in the selected client.
+Curl, or Java, Python, etc.
+8 Click on the button `send` and it will send the request.
+
+![Token Request](resource/portal-token-request2.png "Token Request")
+
+8.1 All the operations in Partner API requires mTLS, meaning that you need to provide the certificate for calling any operation.
+This is the same certificate that you would have uploaded for your APIM service and added to the trusted list in the certificate store of your workstation.
+You can see for instance how to add it on Google Chrome [here](https://support.google.com/chrome/a/answer/6342302?hl=en).
+It varies from OS to OS, e.g for Macbook you can find how to add it [here](https://support.apple.com/en-gb/guide/keychain-access/kyca2431/mac).
+
+Once you have added it to the certificate store of your workstation, you can add it to the request in the portal.
+When you click on `send` the portal will display a popup requesting you to select a certificate for sending using it in the endpoint call, if you do not select it or select a wrong one, the request will fail due missing certificate,
+see more in mTLS [here](Security.md#authentication).
+
+Tip: In case you missed the popup for selecting the certificate, or select the wrong certificate, you can always open the portal again in incognito tab and the \
+popup will appear again.
+
+8.2 click `Ok` button after selecting your certificate.
+
+![Token Popup](resource/portal-cert-popup.png "Token Popup")
+
+
+9 Now you can copy the `token` obtained here and use it request.
+
+![Token Response](resource/portal-token-response.png "Token Response")
+
+10 Now you can call the API endpoints with the `Authorization` header.
+For example the `ping` endpoint.
+11 Do not forget to add the header on the panel on the left side as shown in the below picture.
+
+![Token Request](resource/portal-ping-request.png "Token Request")
+
 
 

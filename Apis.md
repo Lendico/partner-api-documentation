@@ -3,18 +3,17 @@
 ## API Portal
 ### Development
 
-```https://api-portal.accp.openbusiness.ing.de/```
+```https://api-portal.sandbox.lendico.de```
 
 ### Production
-```https://api-portal.openbusiness.ing.de/```
-access available only upon request
+upon request
 
 ## Endpoints
 ### Development
-```https://api.accp.openbusiness.ing.de/partner-api/{resource}```
+```https://api.sandbox.lendico.de/partner-api/{resource}```
 
 ### Production
-```https://api.openbusiness.ing.de/partner-api/{resource}```
+```https://api.lendico.de/partner-api/{resource}```
 
 ### Headers
 For all the APIs operations you must provide the headers:
