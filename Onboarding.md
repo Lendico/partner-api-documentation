@@ -15,10 +15,9 @@ Partner API authenticates clients with the use of public key cryptography and us
 
 So some tasks need to be done before we can go ahead and try out any requests to the Partner API.
 You need the following steps:
-* First, you should already have a Microsoft AD tenant.
+* First, you should already have a Microsoft [AD tenant](https://learn.microsoft.com/en-us/entra/fundamentals/create-new-tenant).
 * Then we will request: 
   * List of IP addresses from where the Partner API will get the calls, for whitelisting them on our API.
-  * List of IP addresses from where you will access the API Portal.
   * We need two different PKI key pairs. You can use official CA signed certificates, or use so called 'Self signed' certificates. See also the certificate specification in [the Authentication section of the security page](Security.md).
 * Next, we will inform you to create an account in the [API Portal](https://api-portal.openbusiness.ing.de/), see how to sign up [here](ApiPortal.md#sign-up).
 * After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md#exploring-apis-and-profile). 
