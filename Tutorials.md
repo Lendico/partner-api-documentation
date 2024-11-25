@@ -187,6 +187,8 @@ How to use it:
    * subscription_key - your subscription key (can be found in API Portal).
    * partner_company_id - your unique partner id (was provided by ING on first onboarding).
    * apim_token - will be set when calling the "token-api get token [APIM]" endpoint
+3. Add the generated client TLS certificate and key to your Postman Settings for the Partner API Host 
+![Postman Settings](resource/postman-settings.png "Postman Settings")
 
 ## Generating Self-Signed certificate with openssl
 

@@ -81,7 +81,7 @@ Two X.509 public key certificates are required for authentication:
 * A TLS connection certificate used for setting up a mutual TLS connection
 * A HTTP Signature certificate used for signing the requests
 
-Those two certificates must have been provided before calling the API otherwise your call will be rejected(see [Onboarding Page](Onboarding.md)).
+Those two certificates must be provided before calling the API, otherwise your calls will be rejected (see [Onboarding Page](Onboarding.md)).
 
 Requests without or with invalid certificates will be rejected with HTTP status code `401`
 
