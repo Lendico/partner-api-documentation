@@ -1,9 +1,9 @@
 # Partner API
 # Token API
-The Token API aims to provide an endpoint for retrieve token for using partner api(Authorization Header).
+The Token API aims to provide an endpoint for retrieving tokens to use with the Partner API (as Authorization Header).
 
 # Operations
-## Token
+## Token URLs
 ### Development
 ```POST https://api.accp.openbusiness.ing.de/token-api/oauth2/token```
 ### Production
@@ -12,10 +12,10 @@ The Token API aims to provide an endpoint for retrieve token for using partner a
 ### Headers
 Headers annotated with \* are mandatory
 * `Content-Type: application/x-www-form-urlencoded`.
+* `Subscription-Key: your-api-portal-subscription-key`
 
 ## Schema
-For the request you need to send in the body the paramenters
-for example :
+Include in the request body these parameters:
 `client_id={client_id}&client_secret={client_secret}`
 
 ### Response 

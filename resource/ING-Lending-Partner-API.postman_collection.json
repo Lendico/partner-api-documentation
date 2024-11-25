@@ -1,0 +1,508 @@
+{
+	"info": {
+		"_postman_id": "4d109958-07cc-4887-8718-1ba95f29603d",
+		"name": "ING Lending Partner API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "install pmlib",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 200\", function () {",
+							"    pm.response.to.have.status(200)",
+							"    pm.globals.set(\"pmlib_code\", responseBody)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://joolfe.github.io/postman-util-lib/dist/bundle.js",
+					"protocol": "https",
+					"host": [
+						"joolfe",
+						"github",
+						"io"
+					],
+					"path": [
+						"postman-util-lib",
+						"dist",
+						"bundle.js"
+					]
+				},
+				"description": "Load the postman-util-lib from github.io and load into postman global variable."
+			},
+			"response": []
+		},
+		{
+			"name": "token-api get token [APIM]",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"apim_token\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Subscription-Key",
+						"value": "{{subscription_key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{apim_client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{apim_client_secret}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.accp.openbusiness.ing.de/token-api/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"api",
+						"accp",
+						"openbusiness",
+						"ing",
+						"de"
+					],
+					"path": [
+						"token-api",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ING partnerapi-ping [APIM]",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"eval( pm.globals.get('pmlib_code') );\r",
+							"var CryptoJS = require(\"crypto-js\");\r",
+							"var moment = require(\"moment\");\r",
+							"\r",
+							"const privateKey = pm.collectionVariables.get(\"private_key\");\r",
+							"const clientId = pm.collectionVariables.get(\"apim_client_id\");\r",
+							"const clientSecret = pm.collectionVariables.get(\"apim_client_secret\");\r",
+							"\r",
+							"signRequest(pm.request, privateKey);\r",
+							"\r",
+							"function signRequest(request, privateKey) {\r",
+							"    const method = request.method.toLowerCase();\r",
+							"    const path = request.url.getPathWithQuery().replace(\"/partner-api\",\"\");\r",
+							"    var body;\r",
+							"    if(path.includes(\"oauth2/token\")){\r",
+							"        body =`client_id=${clientId}&client_secret=${clientSecret}`;\r",
+							"    }else {\r",
+							"        const bodyPostman = JSON.stringify((request.body || \"\"));\r",
+							"        body = JSON.parse(bodyPostman).raw;\r",
+							"    }\r",
+							"    const date = moment.utc().format(\"ddd, DD MMM yyyy HH:mm:ss Z\");\r",
+							"    const bodyEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(body));\r",
+							"    const digest = `SHA-256=${bodyEncoded}`;    \r",
+							"    const message = `(request-target): ${method} ${path}\\ndate: ${date}\\ndigest: ${digest}`;\r",
+							"    var sig = new pmlib.rs.KJUR.crypto.Signature({\"alg\": \"SHA256withRSA\"});\r",
+							"    sig.init(privateKey);\r",
+							"    var hash = sig.signString(message);\r",
+							"    const signedEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(hash));\r",
+							"    var signatureHeader = `keyId=\\\"${clientId}\\\",algorithm=\\\"rsa-sha256\\\",headers=\\\"(request-target) date digest\\\",signature=\\\"${signedEncoded}\\\"`;\r",
+							"\r",
+							"   if(path.includes(\"oauth2/token\")){\r",
+							"        var authSignHeader = `Signature ${signatureHeader}`\r",
+							"        pm.request.headers.add({\r",
+							"            key: 'Authorization',\r",
+							"            value: authSignHeader\r",
+							"        });\r",
+							"    }else {\r",
+							"        pm.request.headers.add({\r",
+							"            key: 'Signature',\r",
+							"            value: signatureHeader\r",
+							"        });\r",
+							"    }\r",
+							"\r",
+							"    pm.request.headers.add({\r",
+							"        key: 'date',\r",
+							"        value: date\r",
+							"    });\r",
+							"\r",
+							"    pm.request.headers.add({\r",
+							"        key: 'digest',\r",
+							"        value: digest\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{apim_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Partner-Company-Id",
+						"value": "{{partner_company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "Subscription-Key",
+						"value": "{{subscription_key}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://api.accp.openbusiness.ing.de/partner-api/ping",
+					"protocol": "https",
+					"host": [
+						"api",
+						"accp",
+						"openbusiness",
+						"ing",
+						"de"
+					],
+					"path": [
+						"partner-api",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "partnerapi-applications [APIM]",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"eval( pm.globals.get('pmlib_code') );\r",
+							"var CryptoJS = require(\"crypto-js\");\r",
+							"var moment = require(\"moment\");\r",
+							"\r",
+							"const privateKey = pm.collectionVariables.get(\"private_key\");\r",
+							"const clientId = pm.collectionVariables.get(\"apim_client_id\");\r",
+							"const clientSecret = pm.collectionVariables.get(\"apim_client_secret\");\r",
+							"\r",
+							"signRequest(pm.request, privateKey);\r",
+							"\r",
+							"function signRequest(request, privateKey) {\r",
+							"    const method = request.method.toLowerCase();\r",
+							"    const path = request.url.getPathWithQuery().replace(\"/partner-api\",\"\");\r",
+							"    var body;\r",
+							"    if(path.includes(\"oauth2/token\")){\r",
+							"        body =`client_id=${clientId}&client_secret=${clientSecret}`;\r",
+							"    }else {\r",
+							"        const bodyPostman = JSON.stringify((request.body || \"\"));\r",
+							"        body = JSON.parse(bodyPostman).raw;\r",
+							"    }\r",
+							"    const date = moment.utc().format(\"ddd, DD MMM yyyy HH:mm:ss Z\");\r",
+							"    const bodyEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(body));\r",
+							"    const digest = `SHA-256=${bodyEncoded}`;\r",
+							"    const message = `(request-target): ${method} ${path}\\ndate: ${date}\\ndigest: ${digest}`;\r",
+							"    var sig = new pmlib.rs.KJUR.crypto.Signature({\"alg\": \"SHA256withRSA\"});\r",
+							"    sig.init(privateKey);\r",
+							"    var hash = sig.signString(message);\r",
+							"    const signedEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(hash));\r",
+							"    var signatureHeader = `keyId=\\\"${clientId}\\\",algorithm=\\\"rsa-sha256\\\",headers=\\\"(request-target) date digest\\\",signature=\\\"${signedEncoded}\\\"`;\r",
+							"\r",
+							"   if(path.includes(\"oauth2/token\")){\r",
+							"        var authSignHeader = `Signature ${signatureHeader}`\r",
+							"        pm.request.headers.add({\r",
+							"            key: 'Authorization',\r",
+							"            value: authSignHeader\r",
+							"        });\r",
+							"    }else {\r",
+							"        pm.request.headers.add({\r",
+							"            key: 'Signature',\r",
+							"            value: signatureHeader\r",
+							"        });\r",
+							"    }\r",
+							"\r",
+							"    pm.request.headers.add({\r",
+							"        key: 'date',\r",
+							"        value: date\r",
+							"    });\r",
+							"\r",
+							"    pm.request.headers.add({\r",
+							"        key: 'digest',\r",
+							"        value: digest\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Subscription-Key",
+						"value": "{{subscription_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Partner-Company-Id",
+						"value": "{{partner_company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{apim_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company\":{\r\n    \"name\":\"Fake Company\",\r\n    \"fax\":\"\",\r\n    \"iban\":\"DE68500105178297336485\",\r\n    \"bic\":\"bic\",\r\n    \"address\":{\r\n      \"line_1\":\"Fake Str. 81\",\r\n      \"line_2\":\"4th floor\",\r\n      \"city\":\"Berlin\",\r\n      \"zip\":\"00000\",\r\n      \"country_code\":\"DE\",\r\n      \"type\": \"PRIMARY\"\r\n    },\r\n    \"financials\":[\r\n      {\r\n        \"year\":2021,\r\n        \"revenue\":\"2000000.00\",\r\n        \"currency\":\"EUR\"\r\n      }\r\n    ],\r\n    \"representatives\":[\r\n      {\r\n        \"roles\":[\r\n          \"APPLICANT\"\r\n        ],\r\n        \"title\":\"title\",\r\n        \"salutation\":\"MR\",\r\n        \"email\":\"muster@muster.de\",\r\n        \"birthday\":\"1950-01-01\",\r\n        \"addresses\":[\r\n          {\r\n            \"line1\":\"Fake 7\",\r\n            \"line2\":\"4 floor\",\r\n            \"city\":\"Berlin\",\r\n            \"zip\":\"00000\",\r\n            \"country_code\":\"DE\",\r\n            \"type\": \"PRIMARY\"\r\n          }\r\n        ],\r\n        \"nationality\":\"DE\",\r\n        \"first_name\":\"Muster\",\r\n        \"last_name\":\"Musterman\",\r\n        \"phone_number\":\"+491700000000\"\r\n      }\r\n    ],\r\n    \"legal_form\":\"GMBH\",\r\n    \"foundation_date\":\"1950-01-01\",\r\n    \"bookkeeping_standard\":\"ESTG\",\r\n    \"credit_scores\":[\r\n      {\r\n        \"history\":[\r\n          {\r\n            \"date\":\"2021-01-01\",\r\n            \"score_value\":\"200\"\r\n          }\r\n        ],\r\n        \"id\":\"0000000000\",\r\n        \"type\":\"CREFO\"\r\n      }\r\n    ]\r\n  },\r\n  \"details\":{\r\n    \"purpose\":\"Algum\",\r\n    \"request_amount\":\"200000.00\",\r\n    \"currency\":\"EUR\",\r\n    \"request_term\":30,\r\n    \"product_code\":\"TERM_LOAN_EQUAL_INSTALLMENT\",\r\n    \"request_term_unit\":\"MONTH\"\r\n  },\r\n  \"partner_account_manager\":{\r\n    \"salutation\":\"MR\",\r\n    \"email\":\"musterPartner@musterPartner.de\",\r\n    \"first_name\":\"Muste\",\r\n    \"last_name\":\"Musterman\",\r\n    \"phone_number\":\"+491700000000\"\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "https://api.accp.openbusiness.ing.de/partner-api/applications",
+					"protocol": "https",
+					"host": [
+						"api",
+						"accp",
+						"openbusiness",
+						"ing",
+						"de"
+					],
+					"path": [
+						"partner-api",
+						"applications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "partnerapi-applications [APIM] Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"eval( pm.globals.get('pmlib_code') );\r",
+							"var CryptoJS = require(\"crypto-js\");\r",
+							"var moment = require(\"moment\");\r",
+							"\r",
+							"const privateKey = pm.collectionVariables.get(\"private_key\");\r",
+							"const clientId = pm.collectionVariables.get(\"apim_client_id\");\r",
+							"const clientSecret = pm.collectionVariables.get(\"apim_client_secret\");\r",
+							"\r",
+							"signRequest(pm.request, privateKey);\r",
+							"\r",
+							"function signRequest(request, privateKey) {\r",
+							"    const method = request.method.toLowerCase();\r",
+							"    const path = request.url.getPathWithQuery().replace(\"/partner-api\",\"\");\r",
+							"    var body;\r",
+							"    if(path.includes(\"oauth2/token\")){\r",
+							"        body =`client_id=${clientId}&client_secret=${clientSecret}`;\r",
+							"    }else {\r",
+							"        const bodyPostman = JSON.stringify((request.body || \"\"));\r",
+							"        body = JSON.parse(bodyPostman).raw;\r",
+							"    }\r",
+							"    const date = moment.utc().format(\"ddd, DD MMM yyyy HH:mm:ss Z\");\r",
+							"    const bodyEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(body));\r",
+							"    const digest = `SHA-256=${bodyEncoded}`;\r",
+							"    const message = `(request-target): ${method} ${path}\\ndate: ${date}\\ndigest: ${digest}`;\r",
+							"    var sig = new pmlib.rs.KJUR.crypto.Signature({\"alg\": \"SHA256withRSA\"});\r",
+							"    sig.init(privateKey);\r",
+							"    var hash = sig.signString(message);\r",
+							"    const signedEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(hash));\r",
+							"    var signatureHeader = `keyId=\\\"${clientId}\\\",algorithm=\\\"rsa-sha256\\\",headers=\\\"(request-target) date digest\\\",signature=\\\"${signedEncoded}\\\"`;\r",
+							"\r",
+							"   if(path.includes(\"oauth2/token\")){\r",
+							"        var authSignHeader = `Signature ${signatureHeader}`\r",
+							"        pm.request.headers.add({\r",
+							"            key: 'Authorization',\r",
+							"            value: authSignHeader\r",
+							"        });\r",
+							"    }else {\r",
+							"        pm.request.headers.add({\r",
+							"            key: 'Signature',\r",
+							"            value: signatureHeader\r",
+							"        });\r",
+							"    }\r",
+							"\r",
+							"    pm.request.headers.add({\r",
+							"        key: 'date',\r",
+							"        value: date\r",
+							"    });\r",
+							"\r",
+							"    pm.request.headers.add({\r",
+							"        key: 'digest',\r",
+							"        value: digest\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Subscription-Key",
+						"value": "{{subscription_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Partner-Company-Id",
+						"value": "{{partner_company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{apim_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.accp.openbusiness.ing.de/partner-api/applications/muster.application.id",
+					"protocol": "https",
+					"host": [
+						"api",
+						"accp",
+						"openbusiness",
+						"ing",
+						"de"
+					],
+					"path": [
+						"partner-api",
+						"applications",
+						"muster.application.id"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "private_key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "apim_client_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "apim_client_secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "subscription_key",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "partner_company_id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "apim_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

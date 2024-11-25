@@ -4,7 +4,7 @@
 
 | Major Version | Minor Version | Date        | Description                                                         |
 |---------------|---------------|-------------|---------------------------------------------------------------------|
-| v1            | 4             | 20 Nov 2024 | Add new endpoints for token and applictaion, new onboarding process |
+| v2            | 0             | 20 Nov 2024 | Add new endpoints for token and application, new onboarding process |
 | v1            | 3             | 17 Feb 2023 | Expand application statuses coverage                                |
 | v1            | 2             | 7 Oct 2022  | Fix broken links                                                    |
 | v1            | 1             | 1 July 2022 | Adding HTTP Signature                                               |

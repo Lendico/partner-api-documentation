@@ -16,19 +16,21 @@ Partner API authenticates clients with the use of public key cryptography and us
 So some tasks need to be done before we can go ahead and try out any requests to the Partner API.
 You need the following steps:
 * First, you should already have a Microsoft [AD tenant](https://learn.microsoft.com/en-us/entra/fundamentals/create-new-tenant).
-* Then we will request: 
-  * List of IP addresses from where the Partner API will get the calls, for whitelisting them on our API.
+* Then we will request:
+  * List of IP addresses from where you will access the API Portal.
+  * List of IP addresses from where you will be calling the Partner API, for whitelisting them on our API.
   * We need two different PKI key pairs. You can use official CA signed certificates, or use so called 'Self signed' certificates. See also the certificate specification in [the Authentication section of the security page](Security.md).
 * Next, we will inform you to create an account in the [API Portal](https://api-portal.openbusiness.ing.de/), see how to sign up [here](ApiPortal.md#sign-up).
-* After that we will send to the email account created in the first step, the credentials to access the API, the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md#exploring-apis-and-profile). 
+* After that we will send to the email account created in the first step, the credentials to access the API (client-id and client-secret), the subscription key will be visible in the portal, [see API Portal Page](ApiPortal.md#exploring-apis-and-profile). 
 
 ## 2 Study this Guide
 Read this guide to understand how to use the API.
 In case any questions reach out to the [Partner API Tech Team or Partner API Business Team](Contacts.md).
-### Request access to test environment
+
+## Request access to test environment
 
 ## 3 Request whitelisting
-For sending requests to partner API your IP needs to be whitelisted, you can request a whitelisting of your IP here [Partner APIM Tech Team](Contacts.md).
+For sending requests to Partner API your IP needs to be whitelisted, you can request a whitelisting of your IP here [Partner APIM Tech Team](Contacts.md).
 We will send you then a subscription key that should be added in the header
 `Subscription-Key`. See more about the subscription key [here](Security.md#subscription-key).
 

@@ -37,4 +37,4 @@ See [Test API Page](TestApi.md)
 See [Token API Page](TokenApi.md)
 
 # Postman collection
-you can find the postman collection [here](https://www.getpostman.com/collections/45d35533417147f71979).
+For more details about an example Postman collection, see [tutorials page](Tutorials.md).

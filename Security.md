@@ -42,8 +42,9 @@ You cannot apply using the same crefo id within the first 5 minutes from the fir
 ```
   
 ## Subscription Key
-A subscription key is a key generated to the user in the onboarding process, this key is unique for each partner and must be provided in a header  ```Subscription-Key: <key>```\* for every request to the server.
-Requests without a Subscription key will be rejected with HTTP status code `401`
+A subscription key is a unique key that is used to authenticate and authorize access to Partner API.
+It is generated in the API Portal in the onboarding process and must be provided in a header  ```Subscription-Key: <key>```\* for every request to the server.
+Requests without a Subscription key in the header will be rejected with HTTP status code `401`
 and response:
 ```
 {
@@ -63,7 +64,7 @@ and response:
 ```
 
 ## OAuth2
-Partner API is protected by OAuth2, for sending request you need to be authorized, for doing so, as part of the API onboarding, 
+Partner API is protected by OAuth2. As part of the API onboarding, 
 you will get the credentials for the OAuth2. 
 With the credentials, you can make a `POST` request to obtain the token, see more information in the [Token API page](TokenApi.md).
 See an example of OAuth2 implementation client in the [Tutorials Page](Tutorials.md#java-apache-httpclient-full-implementation-of-a-client).

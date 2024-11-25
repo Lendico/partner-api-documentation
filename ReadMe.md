@@ -23,7 +23,6 @@
   * [Authorization](Security.md#oauth2)   
   * [Authentication](Security.md#authentication) 
 * [Idempotency](Idempotency.md) 
-* [Versioning](Versioning.md) 
 * [Contact](Contacts.md)
 * [Incidents and Requests](Incidents.md)
 * [Documentation History](History.md) 

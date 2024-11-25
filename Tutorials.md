@@ -2,8 +2,7 @@
 # Samples and Tutorials
 The code snippet provided on this page are only for exemplification purpose, as tutorial, it makes sense to keep it simple for easy understanding 
 and making easy to display code snippet, so code quality, security, libraries, etc. should not be taken for granted.
-## Postman collection 
-you can find the postman collection [here](https://www.getpostman.com/collections/45d35533417147f71979).
+
 ## Java Apache HttpClient full implementation of a client
 Below you find am example of a complete client for partner API, adding certificate for client side, using OAuth2 authorization, and subscription key in the header
 
@@ -18,6 +17,7 @@ import java.net.*;
 import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.cert.CertificateException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,44 +25,53 @@ import java.util.stream.Collectors;
 
 public class PartnerAPIClient {
 
-    private static final String KEYSTORE_PASSWORD = "change for your keystore password";
-    private static final String KEYSTORE_PATH = "changed to your keystore path(with both, message signing and tls certificate), file e.g keystore.jks"; 
-    private static final String CLIENT_ID = "change for you client id";
-    private static final String CLIENT_SECRET = "change for you client secret"; 
-    private static final String PARTNER_API_BASE_URL = "https://api.sandbox.lendico.de/partner-api"; 
-    private static final String TOKEN_URL = PARTNER_API_BASE_URL + "/oauth2/token";
-    private static final String SUBSCRIPTION_KEY = "change to your subscription key"; 
+    private static final String KEYSTORE_PASSWORD = "password"; //"change to your keystore password";
+    private static final String KEYSTORE_PATH = "/message-signing.jks";// "changed to your keystore path(with both, message signing and tls certificate), file e.g keystore.jks";
+    private static final String PKEY_ALIAS = "changed to your private key alias in the keystore";//
+    private static final String CLIENT_ID = "change for you client id (provided by us)";
+    private static final String CLIENT_SECRET = "change for you client secret (provided by us)";
+    private static final String PARTNER_API_BASE_URL = "https://api.accp.openbusiness.ing.de/partner-api";
+    private static final String TOKEN_URL = "https://api.accp.openbusiness.ing.de/token-api/oauth2/token";
+    private static final String SUBSCRIPTION_KEY = "change to your subscription key (from API Portal)";
+    private static final String PARTNER_COMPANY_ID = "change to your unique Partner UUID";
     private static final DateTimeFormatter HEADER_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z");
     private static KeyStore keyStore;
 
     public static void main(String[] args) throws IOException, GeneralSecurityException, InterruptedException {
         keyStore = KeyStore.getInstance("JKS");
-        keyStore.load(new FileInputStream(KEYSTORE_PATH), KEYSTORE_PASSWORD.toCharArray());
+            try (InputStream keyStoreStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(KEYSTORE_PATH)) {
+                if (keyStoreStream == null) {
+                    throw new FileNotFoundException("Keystore file not found in path: " + KEYSTORE_PATH);
+                }
+                keyStore.load(keyStoreStream, KEYSTORE_PASSWORD.toCharArray());
+            }
         pingRequest();
     }
 
     private static void pingRequest() throws GeneralSecurityException, IOException, InterruptedException {
-
         var body = "";
         var currentDate = getCurrentGMTDateAsString(HEADER_DATE_FORMAT);
         var digest = calculateDigest(body);
         var messageToSign = buildMessage(digest, currentDate, "/ping", "get");
         var signedMessage = calculateSignature(messageToSign);
         var signatureHeader = buildSignatureHeader(signedMessage, CLIENT_ID);
-
         var partnerPingRequest = HttpRequest.newBuilder()
                 .uri(URI.create(PARTNER_API_BASE_URL + "/ping"))
                 .header("Authorization", "Bearer " + getToken())// OAuth2 authentication
                 .header("Subscription-Key", SUBSCRIPTION_KEY)// Add Subscription-Key header
+                .header("Partner-Company-Id", PARTNER_COMPANY_ID)// Add Partner-Company-Id header
                 .header("Date", currentDate)// Add date header
                 .header("Digest", digest)// Add digest header
                 .header("Signature", signatureHeader) // add signature header
+                .GET()
                 .build();
 
-        var httpClient = HttpClient.newBuilder().sslContext(getSSLContext()).build();
+        var httpClient = HttpClient.newBuilder()
+                //.proxy(ProxySelector.of(new InetSocketAddress("127.0.0.1", 3128))) Add proxy for whitelisted IP, if needed
+                .sslContext(getSSLContext())
+                .build();
         var response = httpClient.send(partnerPingRequest, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
-
     }
 
     private static SSLContext getSSLContext() throws UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
@@ -76,19 +85,14 @@ public class PartnerAPIClient {
         var body = parameters.keySet().stream()
                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
                 .collect(Collectors.joining("&"));
-        var httpClient = HttpClient.newBuilder().sslContext(getSSLContext()).build();
-        var currentDate = getCurrentGMTDateAsString(HEADER_DATE_FORMAT);
-        var digest = calculateDigest(body);
-        var messageToSign = buildMessage(digest, currentDate, "/oauth2/token", "post");
-        var signedMessage = calculateSignature(messageToSign);
-        var signatureHeader = buildSignatureHeader(signedMessage, CLIENT_ID);
+        var httpClient = HttpClient.newBuilder()
+                //.proxy(ProxySelector.of(new InetSocketAddress("127.0.0.1", 3128))) Add proxy for whitelisted IP, if needed
+                .sslContext(getSSLContext())
+                .build();
 
-        var request = HttpRequest.newBuilder().uri(URI.create(TOKEN_PATH))
+        var request = HttpRequest.newBuilder().uri(URI.create(TOKEN_URL))
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Subscription-Key", SUBSCRIPTION_KEY)// Add Subscription-Key header
-                .header("Date", currentDate)// Add date header
-                .header("Digest", digest)// Add digest header
-                .header("Authorization", "Signature " + signatureHeader) // add signature header
                 .POST(HttpRequest.BodyPublishers.ofString(body)).build();
 
         var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -103,18 +107,17 @@ public class PartnerAPIClient {
             dsa.update(messageToSign.getBytes(StandardCharsets.UTF_8));
             return base64Encode(dsa.sign());
         } catch (Exception e) {
+            return "";
         }
-        return "";
     }
 
     private static String buildMessage(String digest, String date, String uri, String httpMethod) {
         try {
-            var message = new StringBuilder()
+            return new StringBuilder()
                     .append("(request-target): ").append(httpMethod.toLowerCase()).append(" ").append(uri)
                     .append("\ndate: ").append(date)
                     .append("\ndigest: ").append(digest)
                     .toString();
-            return message;
         } catch (Exception e) {
             return "";
         }
@@ -149,7 +152,7 @@ public class PartnerAPIClient {
     }
 
     private static PrivateKey getMessageSigningPrivateKey() throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
-        return (PrivateKey) keyStore.getKey("message-signing", KEYSTORE_PASSWORD.toCharArray());
+        return (PrivateKey) keyStore.getKey(PKEY_ALIAS, KEYSTORE_PASSWORD.toCharArray());
     }
 }
 
@@ -157,7 +160,7 @@ public class PartnerAPIClient {
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Token {
     @JsonProperty("token_type")
-    private String token_type;
+    private String tokenType;
 
     @JsonProperty("expires_in")
     private long expiresIn;
@@ -171,175 +174,20 @@ class Token {
    
 ```
 
-## Postman script for signing request
-Bear in mind 3 things Ffor this code to work :
-1. You need to install the `pmlib` for this refer this link [https://joolfe.github.io/postman-util-lib/](https://joolfe.github.io/postman-util-lib/)
-basically you just need to import this collection [https://github.com/joolfe/postman-util-lib/blob/master/postman/PostmanUtilityLibv21.postman_collection.json](https://github.com/joolfe/postman-util-lib/blob/master/postman/PostmanUtilityLibv21.postman_collection.json), 
-and run the method install.
-2. You need to add the env variables private_key - for filling the variable you can open the private key(any text editor) of your message signing certificate and copy and paste the content.
-3. And fill out apim_client_id env variable with your client id.
+## Postman collection
+You can find an example postman collection here: [Postman collection](resource/ING-Lending-Partner-API.postman_collection.json)
 
-```
-eval( pm.globals.get('pmlib_code') );
-var CryptoJS = require("crypto-js");
-var moment = require("moment");
+How to use it:
+1. Run once the 1st GET (install pmlib). This will install the `pmlib` from [https://joolfe.github.io/postman-util-lib/](https://joolfe.github.io/postman-util-lib/) as a variable in Global Environment.
+   It's needed to cryptographically sign the requests.
+2. Set the following collection variables:
+   * private_key - for filling the variable you can open the private key(any text editor) of your message signing certificate and copy and paste the content.
+   * apim_client_id - your client id (will be provided by ING).
+   * apim_client_secret - your client secret (will be provided by ING).
+   * subscription_key - your subscription key (can be found in API Portal).
+   * partner_company_id - your unique partner id (was provided by ING on first onboarding).
+   * apim_token - will be set when calling the "token-api get token [APIM]" endpoint
 
-const privateKey = pm.collectionVariables.get("private_key");
-const clientId = pm.collectionVariables.get("apim_client_id");
-const clientSecret = pm.collectionVariables.get("apim_client_secret");
-
-signRequest(pm.request, privateKey);
-
-function signRequest(request, privateKey) {
-    const method = request.method.toLowerCase();
-    const path = request.url.getPathWithQuery().replace("/partner-api","");
-    var body;
-    if(path.includes("oauth2/token")){
-        body =`client_id=${clientId}&client_secret=${clientSecret}`;
-    }else {
-        const bodyPostman = JSON.stringify((request.body || ""));
-        body = JSON.parse(bodyPostman).raw;
-    }
-    const date = moment.utc().format("ddd, DD MMM yyyy HH:mm:ss Z");
-    const bodyEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(body));
-    const digest = `SHA-256=${bodyEncoded}`;
-    const message = `(request-target): ${method} ${path}\ndate: ${date}\ndigest: ${digest}`;
-    var sig = new pmlib.rs.KJUR.crypto.Signature({"alg": "SHA256withRSA"});
-    sig.init(privateKey);
-    var hash = sig.signString(message);
-    const signedEncoded = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(hash));
-    var signatureHeader = `keyId=\"${clientId}\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"${signedEncoded}\"`;
-
-   if(path.includes("oauth2/token")){
-        var authSignHeader = `Signature ${signatureHeader}`
-        pm.request.headers.add({
-            key: 'Authorization',
-            value: authSignHeader
-        });
-    }else {
-        pm.request.headers.add({
-            key: 'Signature',
-            value: signatureHeader
-        });
-    }
-
-    pm.request.headers.add({
-        key: 'date',
-        value: date
-    });
-
-    pm.request.headers.add({
-        key: 'digest',
-        value: digest
-    });
-}
-
-```
-
-
-## Curl example for calling the API
-
-### Token Request
-```
-#!bin/bash
-
-###############################################################################
-#                             REQUEST APPLICATIION ACCESS TOKEN               #
-###############################################################################
-# This script requests application access token for the Partner API           #
-###############################################################################
-
-
-keyId="CLIENT_ID" # client_id as provided 
-subscriptionKey="SUBSCRIPTION_KEY" # Subscrption key
-certPath="certPath/" # path of the certificates and keys
-
-httpHost="https://api.sandbox.lendico.de/partner-api"
-
-# httpMethod value must be in lower case
-httpMethod="post"
-reqPath="/oauth2/token"
-
-# CALCULATE DIGEST
-# You can also provide scope parameter in the body E.g. "grant_type=client_credentials&scope=greetings%3Aview" 
-# scope is an optional parameter. The downloaded certificate contains all available scopes. If you don't provide a scope, the accessToken is returned for all scopes available in certificate
-payload="client_id=CLIENT_ID&client_secret=SECRET_ID"
-payloadDigest=`echo -n "$payload" | openssl dgst -binary -sha256 | openssl base64`
-digest=SHA-256=$payloadDigest
-
-# CALCULATE DATE
-reqDate=$(LC_TIME=en_US.UTF-8 date -u "+%a, %d %b %Y %H:%M:%S GMT")
-
-
-# signingString must be declared exactly as shown below in separate lines
-signingString="(request-target): $httpMethod $reqPath
-date: $reqDate
-digest: $digest"
-
-signature=`printf %s "$signingString" | openssl dgst -sha256 -sign "${certPath}message-signing.key" -passin "pass:changeit" | openssl base64 -A`
-
-# Curl request method must be in uppercase e.g "POST", "GET"
- curl -i -X POST "${httpHost}${reqPath}" \
--H 'Accept: application/json' \
--H 'Content-Type: application/x-www-form-urlencoded' \
--H "Subscription-Key: ${subscriptionKey}" \
--H "Digest: ${digest}" \
--H "Date: ${reqDate}" \
--H "authorization: Signature keyId=\"$keyId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\"" \
--d "${payload}" \
---cert "${certPath}client-tls.crt" \
---key "${certPath}client-tls.key"
-
-```
-
-### Ping Request 
-
-```
-#!/bin/bash
-
-###############################################################################
-# # You must request an application access token to run this script.          #
-# Please update the variables "keyId", ""accessToken", "certPath".			  #
-###############################################################################
-
-keyId="2e91ff74-65c9-4590-a355-399998878d4f" # keyId is the Client ID we sent to you
-subscriptionKey="171bda0be8914b5fb99ad7faa14a860d" # Subscrption key
-
-certPath="/Users/username/Documents/ing/dev/certs/script/apim/" # path of the two pair of self-signed X.509 certificates and keys that you generated  and sent to us the pfx file
-
-httpHost="https://api.sandbox.lendico.de/partner-api"
-
-# httpMethod must be in lower code
-httpMethod="get"
-reqPath="/ping"
-
-# Since the message body (payload) is empty, the digest is defaulted to the hash256 of an empty body.
-digest="SHA-256=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="
-
-# Generated value of application access token. Please note that the access token expires 
-accessToken="eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicHJkLThlZTk0NTIzLTAxNjMtNDMyZi1hYjgwLWFhNjU4MTFhNDBmYiIsImN0eSI6IkpXVCJ9..H8kRkDjRnGi6HIQqw2HRTA.kBvpRHNJzZnMVHmm_N275GGwfQ8ju1optAj_FeZmsXOL2pRbvaQHhC09nmr75cG3FifNST_CfeNhLqf-0maO5p2_AEZzlPIeSW6crK4xnMLz2BWuF83AoSNcepvbHgOj4tOileHoLR5n4ZQNjAT7F-SiwOHMfMgTzpJiqAsDvDWK3gWJfmFezW1kmsTXc5q0v8oxo9o2V25gRripyMpNu3Ow6uN5AOH_vA3IP5yTGpNhvxL720t23cCdnDGQogcjth0v-ntd7o66ibqp66PLEqXYxLW-f05C2OYsKrKp9jIZ3VvHoPUXZojMxmt1AUBmzifIiCxD-ENDjugDjh9zEewDBSHeyrTuzapBzJSABKxA67JVNXzuSVbFykywL8jD1Begz9Zs_GN4UdpHojbGrmB-Zyoq-HAhopQNTi-6LQTDEZj2UYt2NJjpHVQX63ye2jVOgE1zV1Jul8YHi7qFWp9I3uTuhj09BxIPWCFWQSIPj8dRW23SUap4xtib46QIZlsKEYa4zR9xIHDbHKZdQcwCf8LxFKYxCjEuwXotOQgzGtB3CqA2J_F5eMmKC9_SV8UkflQb4a5AKrW8Dm9qpdN93ErKhjRIUEx24AsSDEK9-MZUI9gUsSUAoFY05XVidZ7tuNpKandxf1NjsixLxljODUav1poKqboPGW4OaxwFYLZXY0jEtFx4Ib8Qpwg26b2rugPkFQgkDne7RWz94ESnLTSBoz8-8_wp0yVMTQsZgNcbsEs2OIueaaEGHLEmVacc_L-kT8P2NjXUfuzNJbaoSxnVcni2WeP8NAbLFIMRKPtEKQUc8nopl7c0Sh50K8quPprfuVLdZOMa19TshIBlDTP98sc6AgaQ56k_Pbuj60fbk-c7zY7zxHApHY2Uo2cJD5dl-W2ucUgwuFV86DhMrX9q_eTesVrWQ7pXvrobC2_7t6O_IBsKu4yJQzi_VBRfmf3nMStEe-Xz0L_aefMOtnX5Z9WQoOVcNMpDr-Ttpm9LSefurZUD-xprvz1idpyDbv_YMfzMz1Kv481EUToqKwXDgUdAOtOoD50XLbLEdAHxqlfymMUYv3MPH-iVBoDirhOQxJFrWOt1t5_PQCz73Xwffv05796fQ3wAnndKB2jm4_J-9i5UpiWTTId7sLHdArmXFRxibuga_326DNZlyk913fe6gXKbXboYRb7SuCasFcZ3WFK5NoqodzaLZXLBTZhCRg3cQciOWHzIji-mFXHPabqcKacpU_pM7X3c96424AObvfuLCEvAYmHz06OmKKK9ACV9CUPXxue3gCtbGBmOYV6erWUcvt06CXOlxwgiLVkgXfuscz7Fn1FwamU-qYfimYtRXPt_qzFi3I9qBqzbKxPvOHm8mFWHhoBK1DFKEzL0q9sYAYqkzOHlS9dGB9wJ5l4AQIIwhHPK47Wjf7DN1E01rG5ZYp45H7DMs6fXwtO_4KyLI2NkI9YWNdbXr84h3zcU4pqfClhQyBGlyF4nh7Y08wG3NZ3DD3mzQdT9ryYffCZEFcDpVcfhraLpk2qXlYRRDh6vky2ESjKZEGmBcRe3c_3Fx66eGNBk5WIGOzud6BkrYX_kyHTOYsh4A4xZpF794LZo9yPkekAGEkt2SkEkpJAQol8WWnHo2DK98TGX4OndtdQKttPFlsVYbCktCQYGbH3Zx9AEYhdwO-xl1kj0mjfrpi8Q16CslDl1u8rHeQIdLlTN2R274EKXG_KWAAa3R4WX8ZQgNnmgdeUL7AwUSd9JG8v6VNS6BY0HXbD4iT_mq__VHa1D0d49JdayP-cjiuCRgJMlBvz7WOKrNbrFMaVfrPRDMtFzDq75TzHtGuuHXqt9KNhrKkhJFf_Y_0xx2L6eBF_EO40ETC3Nu1lstPQpnGQxGiZeBtHpX5dRaYQ0mFrzvZ4TJz0Ss0hKRM2H6TqsTrNSMS_q2uf1fRW48P5ElKBTfnHSBALh4iwV3Zwq8-Zih48kj1TGsYKcxJmsiGOV1vI9Z3xEsiLKcGeS0HMw3ToVHCeLvG1X1aCqbrbXxURR9x15ZXPy_kJDPHDNqDieF7j8sHchxpSbwCGHvtXSPs80v-qQC9jyxFcB_mXO4MtwxxcMcSlkPOrZxpUk1U0d0GkfZzss5xKTMEFCHdcpHFTU5_MZoCmTv809jpnz_AOnWB4N1eA0iwXC3ZFIfT_GjKOPpyjYiCjr63oaUiahJHl-oW4EQHh2V-ZgFkN2A9oe7DmcruFWHWca6etKrSv5xOKTPfJycCH318EckzrclUJviRG7fkY5izcjeiktW0xFPvEC0U0o5Rs39bbeOd0NmrConMcbDHhU2CpQrxs4K2elNzQVcO7dBLuvJmzVXw4XKGtmMTvVYsORoYauOR5b4krhYENI0MzoO3dY_PvSayIGwww4PNXYl4Ail9iELTbA06uS.vxbf2aRnZfa9fLwA7TOwpqzJIcPK8T10X95bPyEns3I"
-
-reqDate=$(LC_TIME=en_US.UTF-8 date -u "+%a, %d %b %Y %H:%M:%S GMT")
-
-# signingString must be declared exactly as shown below in separate lines
-signingString="(request-target): $httpMethod $reqPath
-date: $reqDate
-digest: $digest"
-
-# signingString must be declared exactly as shown below in separate lines
-signature=`printf %s "$signingString" | openssl dgst -sha256 -sign "${certPath}message-signing.key" | openssl base64 -A`
-
-# Curl request method must be in uppercase e.g "POST", "GET"
-curl -i -X GET "${httpHost}${reqPath}" \
--H 'Accept: application/json' \
--H 'Content-Type: application/json' \
--H "Subscription-Key: ${subscriptionKey}" \
--H "Date: ${reqDate}" \
--H "Authorization: Bearer ${accessToken}" \
--H "Signature: keyId=\"$keyId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\"" \
---cert "${certPath}client-tls.crt" \
---key "${certPath}client-tls.key"
-```
 ## Generating Self-Signed certificate with openssl
 
 
@@ -368,9 +216,9 @@ openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out serv
 openssl pkcs12 -export -nokeys -in server_public.crt -out server.pfx
 ```
 
-NOTE: In the step 4 will ask you for a password for packing the file into PFX file, in case you use a password here you will need to send us the password.
+NOTE: In the step 4 you will be asked for a password for packing the file into PFX file, in case you use a password here you will need to send us the password.
 
-## In case using java as in the tutorial example, you can generate a pkcs12 file for the key store as below
+## In case you are using a java client (as in the tutorial example), you can generate a pkcs12 file for the key store as below
 
 ```
 openssl pkcs12 -export -in server_public.crt -inkey server.key -out server-cert.p12
